@@ -1,0 +1,48 @@
+@font-face {
+    font-family: "Roboto";
+    src: url(58aef543c97bbaf6a9896e8484456d98.ttf);
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.logo {
+    background-image: url(99d762b204736c7da9427d3f0fa453cf.png);
+    background-size: cover;
+    height: 280px;
+    width: 280px;
+    margin: 0 auto;
+}
+.box {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+}
+.box h2 {
+  text-align: center;
+  color: palevioletred;
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  border: 1px solid #ccc; }
+  .card h2 {
+    text-align: center;
+    color: green; }
+
+
+/*# sourceMappingURL=main.css.map*/
