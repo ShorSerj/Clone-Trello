@@ -7,6 +7,7 @@ import xml from './assets/data.xml';
 import csv from "./assets/data.csv";
 import Logo from './assets/logo';
 import './babel'
+import './style/reset.css';
 import './style/style.css';
 import './style/less.less';
 import "./style/sass.scss";

@@ -11,14 +11,42 @@
 <body>
     
     <header>
-        <div class="logo"></div>
         <nav>
-            <ul>
-                <li><a href="">О проекте</a></li>
-                <li><a href="">Доска</a></li>
-                <li><a href="">Контакты</a></li>
+            <ul class="serchLogo">
+                <li><img src="/src/assets/logo_home.png"></li>
+                <li><img src="/src/assets/logo_bord.png"><span>Доски</span></li>
+                <li><input class="search" type="search"><img src="/src/assets/logo_search.png"></li>
+            </ul>
+        
+            <div class="logo"></div>
+
+            <ul class="socialLogo">
+                <li><img src="/src/assets/logo_plus.png"></li>
+                <li><img src="/src/assets/logo_info.png"></li>
+                <li><img src="/src/assets/logo_social.png"></li>
+                <li class="user"><img src="/src/assets/logo_user.png"></li>
             </ul>
         </nav>
+
+        <div class="boardHeader">
+            
+            <span class="nameBord">Small Clone Trello</span>
+            
+            <ul class="teamMeny">
+                <li class="favorite"><img src="/src/assets/logo_favorite.png"></li>
+                <span class="border"></span>
+                <li><span class="nameTeam">BlackSmith7</span><span class="statusPay">Free</span></li>
+                <span class="border"></span>
+                <li><img src="/src/assets/logo_team.png"><span class="teams">Командная</span></li>
+                <span class="border"></span>
+                <li class="invite"><img src="/src/assets/logo_user.png"><img src="/src/assets/logo_st.png"><span>Пригласиить</span></li>
+            </ul>
+            <ul class="mainMeny">
+                <li><img src="/src/assets/logo_butler.png"><span class="butler">Butler</span></li>
+                <li><img src="/src/assets/logo_menu.png"><span class="menu">Меню</span></li>
+            </ul>
+
+        </div>
 
     </header>
     
@@ -26,16 +54,38 @@
         <div class="container">
 
             <div class="to-Do">
-                <div>
-                    <div class="title">To-Do</div>
-                    <button>...</button>
+                <div>    
+                    <div class="taskHead">
+                        <div class="title">To-Do</div>
+                        <span class="listActions"><span>...</span></span>
+                    </div>
+                    
+                    <div class="taskColomn">
+                        <div class="taskContainer">
+                            <div class="taskList">
+                                <span class="taskText">Создать репозеторий Small Clone Trello</span>
+                                <div class="deadLine">
+                                    <img src="/src/assets/logo_deadLine.png">
+                                    <span>2 фев</span>
+                                </div>
+                                <!-- <div class="performer"></div> -->
+                            </div>
+                        </div>
+                        <div class="taskContainer">
+                            <div class="taskList">
+                                <span class="taskText">Создать репозеторий Small Clone Trello</span>
+                                <div class="deadLine">
+                                    <img src="/src/assets/logo_deadLine.png">
+                                    <span>2 фев</span>
+                                </div>
+                                <!-- <div class="performer"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
-            <div class="task-list">
-
-            </div>
-            <div class=""></div>in-progress
-            <div class="done"></div>
+            
         </div>
     </main>
 
