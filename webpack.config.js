@@ -84,7 +84,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
-        main: ['@babel/polyfill', './index.jsx'],
+        main: ['@babel/polyfill', './index.js'],
         analytics: './analytics.ts'
     },
     output: {
@@ -140,7 +140,7 @@ module.exports = {
             use: ["file-loader"]
         },
         {
-            test: /\.(ttf|wolf|wolf2|eot)$/,
+            test: /\.(ttf|woff|woff2|eot)$/,
             use: ["file-loader"]
         },
         {

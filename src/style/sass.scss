@@ -1,3 +1,5 @@
+@import "font-awesome.scss";
+
 @mixin headLogo {
     li {
     min-width: 32px;
@@ -171,14 +173,16 @@ main {
     .container {
         background: linear-gradient(180deg,rgba(0,0,0,.24) 0,rgba(0,0,0,.24) 48px,transparent 80px,transparent);
         padding-left: 4px;
-        .to-Do {
+        display: flex;
+        .column {
             margin: 0 4px;
             width: 260px;
             background-color: #ebecf0;
             border-radius: 3px;   
             min-height: 20px;
+            padding: 0 10px 10px 10px;
             
-            .taskHead {
+            .column-header {
                 padding: 5px 4px 3px 8px;
 
                 .title {
@@ -191,7 +195,7 @@ main {
                     width: 215px;
                 };
     
-                .listActions {    
+                .list-actions {    
                     position: relative;
                     vertical-align: middle;
                     height: 32px;
@@ -209,53 +213,80 @@ main {
                     };
                 };
             };
-            .taskColomn{
-                padding-bottom: 8px;
-                .taskContainer {
-                    background-color: #fff;
-                    border-radius: 3px;
-                    box-shadow: 0 1px 0 rgba(9,30,66,.25);
-                    margin: 0 8px 8px 8px;
-                    padding: 0 4px;
+            // .taskColomn{
+            //     padding-bottom: 8px;
+            //     .taskContainer {
+            //         background-color: #fff;
+            //         border-radius: 3px;
+            //         box-shadow: 0 1px 0 rgba(9,30,66,.25);
+            //         margin: 0 8px 8px 8px;
+            //         padding: 0 4px;
 
-                    .taskList {
-                        padding: 6px 8px 2px 8px;
+                    .list-tasks {
                         color: #172b4d;
 
-                        .taskText {
-                            word-wrap: break-word;
-                            font-size: 14px;
-                            font-weight: 400;
-                            margin-bottom: 4px;
-                        };
-
-                        .deadLine {
-                            background-color: #ec9488;
+                        .task {
+                            background-color: white;
+                            padding: 6px 8px 2px 8px;
+                            margin-bottom: 8px;
+                            box-shadow: 0 1px 0 rgba(9,30,66,.25);
                             border-radius: 3px;
-                            padding: 1px 0 4px 2px;
-                            color: #fff;
-                            margin: 10px 0;
-                            width: 60px;
-
-                            img {
-                                width: 16px;
-                                height: 16px;
+                            transition: .5s;
+                            
+                            &:hover {
+                                background-color: #9fa1a3;
+                                cursor: pointer;
+                                transition: .5s;
+                                color: white;
                             };
 
-                            span {
+                            .task-text {
+                                word-wrap: break-word;
+                                font-size: 14px;
+                                font-weight: 400;
+                                margin-bottom: 4px;
+                            };
+
+                            .dead-line {
+                                background-color: #ec9488;
+                                border-radius: 3px;
+                                padding: 1px 0 4px 4px;
+                                color: #fff;
+                                margin: 10px 0;
+                                width: 60px;
                                 font-size: 12px;
-                                padding: 0 4px 0 2px;
-                                vertical-align: middle;
-                            };
+
+                                span{
+                                    padding: 2px 4px 0 6px;
+                                    display: inline-block;
+                                };
+                            };                             
+                        };   
+                    };
+
+                    .add-task {
+                        font-size: 14px;
+                        background: none;
+                        border: none;
+                        padding-bottom: 5px;
+                        border-radius: 3px;
+                        transition: .5s;
+
+                        &:hover {
+                            background-color: #42526e;
+                            color: white;
+                            transition: .5s;
                         };
 
-                        .performer{
-                            width: 28px;
-                            height: 28px;
+                        &::before {
+                            content: "+";
+                            font-size: 20px;
+                            font-weight: bold;
+                            padding-right: 5px;
                         };
                     };
                 };                
-            };
-        };   
+        //     };
+        // };   
     };
 };
