@@ -170,7 +170,13 @@ header {
 };
 
 main {
-    .container {
+    .dragElement {
+        opacity: 0;
+    }
+    .container{
+        display: flex;
+        
+    .list-column {
         background: linear-gradient(180deg,rgba(0,0,0,.24) 0,rgba(0,0,0,.24) 48px,transparent 80px,transparent);
         padding-left: 4px;
         display: flex;
@@ -288,5 +294,6 @@ main {
                 };                
         //     };
         // };   
+    };
     };
 };
