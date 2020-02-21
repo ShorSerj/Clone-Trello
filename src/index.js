@@ -9,6 +9,16 @@ import Task from './task.js';
 let taskIdCounter = 10;
 let columnIdCounter = 4;
 
+// document.body.style.backgroundImage = 'url(/src/assets/'+ randomImg()  +'.jpg)'
+// function randomImg(min=1, max=4) {
+//     return Math.round(Math.random() * (max - min) + min)
+//   }
+//Second version
+const listBack = [ "url(/src/assets/back_1.jpg", "url(/src/assets/back_2.jpg", "url(/src/assets/back_3.jpg", "url(/src/assets/back_4.jpg"]
+const randomBack = Math.floor(Math.random()*listBack.length)    
+document.body.style.backgroundImage = listBack[randomBack]
+//
+//
 
 
 const task1 =  new Task();
