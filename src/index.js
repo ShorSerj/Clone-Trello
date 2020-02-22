@@ -14,225 +14,176 @@ let columnIdCounter = 4;
 //     return Math.round(Math.random() * (max - min) + min)
 //   }
 //Second version
-const listBack = [ "url(/src/assets/back_1.jpg", "url(/src/assets/back_2.jpg", "url(/src/assets/back_3.jpg", "url(/src/assets/back_4.jpg"]
-const randomBack = Math.floor(Math.random()*listBack.length)    
-document.body.style.backgroundImage = listBack[randomBack]
+window.onload = () => {
+    const listBack = ["url(/src/assets/back_1.jpg", "url(/src/assets/back_2.jpg", "url(/src/assets/back_3.jpg", "url(/src/assets/back_4.jpg"]
+    const randomBack = Math.floor(Math.random() * listBack.length)
+    document.body.style.backgroundImage = listBack[randomBack]
+}
 //
 //
 
 
-const task1 =  new Task();
-console.log("ConstTask",task1)
+const task1 = new Task();
+console.log("ConstTask", task1)
 
-const editValue = function(element){
+const editValue = function (element) {
     element.addEventListener('dblclick', () => {
         element.setAttribute('contenteditable', true)
         element.focus()
-      })
-      element.addEventListener("blur", ()=>{
-          element.removeAttribute('contenteditable')
-      })  
+    })
+    element.addEventListener("blur", () => {
+        if (element.innerHTML.length < 1 && element.closest(".task")) {
+            element.closest(".task").remove()
+        }
+
+        element.removeAttribute('contenteditable')
+    })
 }
 
 const eventAddTask = columnElement => {
     let buttonAddTask = columnElement.querySelector(".add-task")
-    buttonAddTask.addEventListener('click', function() {
+    buttonAddTask.addEventListener('click', function () {
         const taskElement = document.createElement('div')
         taskElement.classList.add('task')
         taskElement.setAttribute('data-task-id', taskIdCounter)
         taskElement.setAttribute('draggable', 'true')
-        taskElement.innerHTML = 
-            `<span class="task-text edit">Создать репозеторий </span>
-            <div class="dead-line"><i class="fa fa-clock-o" aria-hidden="true"></i><span>2 фев</span></div>`
-        
+        taskElement.innerHTML =
+            `<div class="task-text edit"></div>
+            <div></div>`
+
         columnElement.querySelector('.list-tasks').append(taskElement)
         taskIdCounter++
-        let titleTaskNewElement = taskElement.querySelector('.edit')
+        const titleTaskNewElement = taskElement.querySelector('.edit')
         editValue(titleTaskNewElement)
+        titleTaskNewElement.setAttribute('contenteditable', true)
+        titleTaskNewElement.focus()
         addDragnDropEvent(taskElement)
     })
     addDragnDropEventColums(columnElement)
 }
 
-const eventAddTaskLists = listTasks => {
-    listTasks.setAttribute('draggable', true)
-    listTasks.addEventListener("dragstart", evenDragStartListTasks)
-    listTasks.addEventListener("dragend", evenDragEndListTasks)
-    listTasks.addEventListener("dragenter", evenDragEnterListTasks)
-    listTasks.addEventListener("dragover", evenDragOverListTasks)
-    listTasks.addEventListener("dragleave", evenDragLeaveListTasks)
-    listTasks.addEventListener("drop", evenDragDropListTasks)
-}
 
-const buttonColumn = document.querySelector(".add-column") 
+
+const buttonColumn = document.querySelector(".add-column")
 const chooseColumn = document.querySelectorAll(".column")
 const chooseTask = document.querySelectorAll(".task")
-const chooseListTask = document.querySelectorAll(".list-tasks")
 
-chooseListTask.forEach(eventAddTaskLists)
+
+
 
 let darggbleTask = null
 let darggbleColumn = null
 
-///
-const evenDragStartListTasks = function(event) {
-    event.stopPropagation()
-}
-const evenDragEndListTasks = function(event) {
-    event.stopPropagation()
-}
-const evenDragEnterListTasks = function(event) {
-    event.stopPropagation()
-    // if(darggbleTask && this.childNodes.length < 1) { 
-        console.log("evenDragEnterListTasks", evenDragEnterListTasks )
-    // }
-    
-}
-const evenDragOverListTasks = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-    // if(darggbleTask !== this || !darggbleColumn) {
-    // // console.log("evenDragOver" )
-    // // console.log(this )
-    // }
-}
-const evenDragLeaveListTasks = function(event) {
-    event.stopPropagation()
-    // if(darggbleTask !== this || !darggbleColumn) {
-    // // console.log("evenDragLeave" )
-    // }
-}
-const evenDragDropListTasks = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-//     if(darggbleTask !== this || !darggbleColumn) {
-//     // console.log("evenDragDrop", this )
-    
-//     if(this.parentElement === darggbleTask.parentElement && !darggbleColumn){
-//         const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
-//         const x = parentElements.indexOf(this)
-//         const y = parentElements.indexOf(darggbleTask)
-//         if(x < y) {
-//             this.parentElement.insertBefore(darggbleTask, this)
-//         }
-//         else{
-//             this.parentElement.insertBefore(darggbleTask, this.nextElementSibling)
-//         }
-//     }
-//     else{
-//         this.parentElement.insertBefore(darggbleTask, this)
-//     }
-// }
-}
-///
-///
-const evenDragStartTask = function(event) {
+
+const evenDragStartTask = function (event) {
     event.stopPropagation()
     this.classList.add("dragElement")
     darggbleTask = this
 }
-const evenDragEndTask = function(event) {
+const evenDragEndTask = function (event) {
     event.stopPropagation()
     this.classList.remove("dragElement")
     darggbleTask = null
 }
-const evenDragEnterTask = function(event) {
+const evenDragEnterTask = function (event) {
     event.stopPropagation()
-    if(darggbleTask !== this || !darggbleColumn) { 
+    if (darggbleTask !== this || !darggbleColumn) {
         // console.log("evenDragEnter", this )
     }
-    
+
 }
-const evenDragOverTask = function(event) {
+const evenDragOverTask = function (event) {
     event.preventDefault()
     event.stopPropagation()
-    if(darggbleTask !== this || !darggbleColumn) {
-    // console.log("evenDragOver" )
-    // console.log(this )
+    if (darggbleTask !== this || !darggbleColumn) {
+        // console.log("evenDragOver" )
+        // console.log(this )
     }
 }
-const evenDragLeaveTask = function(event) {
+const evenDragLeaveTask = function (event) {
     event.stopPropagation()
-    if(darggbleTask !== this || !darggbleColumn) {
-    // console.log("evenDragLeave" )
+    if (darggbleTask !== this || !darggbleColumn) {
+        // console.log("evenDragLeave" )
     }
 }
-const evenDragDropTask = function(event) {
+const evenDragDropTask = function (event) {
     event.preventDefault()
     event.stopPropagation()
-    if(darggbleTask !== this || !darggbleColumn) {
-    // console.log("evenDragDrop", this )
-    
-    if(this.parentElement === darggbleTask.parentElement && !darggbleColumn){
-        const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
-        const x = parentElements.indexOf(this)
-        const y = parentElements.indexOf(darggbleTask)
-        if(x < y) {
+    if (darggbleTask !== this || !darggbleColumn) {
+        // console.log("evenDragDrop", this )
+
+        if (this.parentElement === darggbleTask.parentElement && !darggbleColumn) {
+            const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
+            const x = parentElements.indexOf(this)
+            const y = parentElements.indexOf(darggbleTask)
+            if (x < y) {
+                this.parentElement.insertBefore(darggbleTask, this)
+            } else {
+                this.parentElement.insertBefore(darggbleTask, this.nextElementSibling)
+            }
+        } else {
             this.parentElement.insertBefore(darggbleTask, this)
         }
-        else{
-            this.parentElement.insertBefore(darggbleTask, this.nextElementSibling)
-        }
     }
-    else{
-        this.parentElement.insertBefore(darggbleTask, this)
-    }
-}
 }
 //
 ///
 //
-const evenDragStartColumn = function(event) {
+const evenDragStartColumn = function (event) {
     this.classList.add("dragElement")
     darggbleColumn = this
     console.log(darggbleColumn)
 
 }
-const evenDragEndColumn = function(event) {
+const evenDragEndColumn = function (event) {
     this.classList.remove("dragElement")
     darggbleColumn = null
 }
-const evenDragEnterColumn = function(event) {
+const evenDragEnterColumn = function (event) {
     event.stopPropagation()
-    if(darggbleColumn !== this || !darggbleTask) {
+    if (darggbleColumn !== this || !darggbleTask) {
         // console.log("evenDragEnter", this )
     }
-   
+
 }
-const evenDragOverColumn = function(event) {
+const evenDragOverColumn = function (event) {
     event.preventDefault()
     event.stopPropagation()
-    if(darggbleColumn !== this || !darggbleTask) {
-    // console.log("evenDragOverColumn" )
+    if (darggbleColumn !== this || !darggbleTask) {
+        // console.log("evenDragOverColumn" )
     }
 }
-const evenDragLeaveColumn = function(event) {
+const evenDragLeaveColumn = function (event) {
     event.stopPropagation()
-    if(darggbleColumn !== this || !darggbleTask) {
-    // console.log("evenDragLeave" )
+    if (darggbleColumn !== this || !darggbleTask) {
+        // console.log("evenDragLeave" )
     }
 }
-const evenDragDropColumn = function(event) {
+const evenDragDropColumn = function (event) {
     event.preventDefault()
     event.stopPropagation()
-    if(darggbleColumn !== this && darggbleColumn) {
-    console.log("darggbleColumn", darggbleColumn, "darggbleTask", darggbleTask)
-    if(this.parentElement === darggbleColumn.parentElement ){
-        const parentElements = Array.from(this.parentElement.querySelectorAll(".column"))
-        const x = parentElements.indexOf(this)
-        const y = parentElements.indexOf(darggbleColumn)
-        if(x < y) {
-            this.parentElement.insertBefore(darggbleColumn, this)
-        }
-        else{
-            this.parentElement.insertBefore(darggbleColumn, this.nextElementSibling)
+    if (darggbleColumn) {
+        if (darggbleColumn !== this && darggbleColumn) {
+            if (this.parentElement === darggbleColumn.parentElement) {
+                const parentElements = Array.from(this.parentElement.querySelectorAll(".column"))
+                const x = parentElements.indexOf(this)
+                const y = parentElements.indexOf(darggbleColumn)
+                if (x < y) {
+                    this.parentElement.insertBefore(darggbleColumn, this)
+                } else {
+                    this.parentElement.insertBefore(darggbleColumn, this.nextElementSibling)
+                }
+            } else {
+                this.parentElement.insertBefore(darggbleColumn, this)
+            }
+
         }
     }
-    else{
-        this.parentElement.insertBefore(darggbleColumn, this)
+    else if(darggbleTask) {
+        console.log(darggbleTask)
+        this.querySelector(".list-tasks").append(darggbleTask)
+        
     }
-    
-    }    
 }
 const addDragnDropEvent = (chooseTask) => {
     chooseTask.setAttribute('draggable', true)
@@ -257,12 +208,12 @@ chooseTask.forEach(addDragnDropEvent)
 
 chooseColumn.forEach(eventAddTask)
 
-buttonColumn.addEventListener('click', function() {
+buttonColumn.addEventListener('click', function () {
     const columnNewElement = document.createElement('div')
     columnNewElement.classList.add('column')
     columnNewElement.setAttribute('data-column-id', columnIdCounter)
     columnNewElement.setAttribute('draggable', true)
-    columnNewElement.innerHTML = 
+    columnNewElement.innerHTML =
         `<div class="column-header">
             <div class="title edit">Done</div>
             <span class="list-actions"><span>...</span></span>

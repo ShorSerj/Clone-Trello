@@ -15,7 +15,7 @@
     }   
 }   
 
-$mainBackground: url(/src/assets/back_1.jpg) no-repeat;
+$mainBackground:  no-repeat;
 $logo: url(/src/assets/logo.png) no-repeat;
 
 body {
@@ -251,6 +251,8 @@ main {
                                 font-size: 14px;
                                 font-weight: 400;
                                 margin-bottom: 4px;
+                                min-height: 50px;
+                                
                             };
 
                             .dead-line {
