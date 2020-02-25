@@ -4,15 +4,15 @@ import './style/less.less';
 import "./style/sass.scss";
 import { Task } from "./task.js"
 import { Column } from "./column.js"
+import { BackImage } from "./backImage.js"
 
 
-
+///
 window.onload = () => {
     const listBack = ["url(/src/assets/back_1.jpg", "url(/src/assets/back_2.jpg", "url(/src/assets/back_3.jpg", "url(/src/assets/back_4.jpg"]
-    const randomBack = Math.floor(Math.random() * listBack.length)
-    document.body.style.backgroundImage = listBack[randomBack]
+    BackImage.changeBack(listBack)
 }
-
+///
 const buttonColumn = document.querySelector(".add-column")
 const chooseColumn = document.querySelectorAll(".column")
 const chooseTask = document.querySelectorAll(".task")
