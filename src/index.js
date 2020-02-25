@@ -2,231 +2,27 @@ import './style/reset.css';
 import './style/style.css';
 import './style/less.less';
 import "./style/sass.scss";
-// import "/column.js";
-// import "/task.js";
-import Task from './task.js';
+import { Task } from "./task.js"
+import { Column } from "./column.js"
 
-let taskIdCounter = 10;
-let columnIdCounter = 4;
 
-// document.body.style.backgroundImage = 'url(/src/assets/'+ randomImg()  +'.jpg)'
-// function randomImg(min=1, max=4) {
-//     return Math.round(Math.random() * (max - min) + min)
-//   }
-//Second version
+
 window.onload = () => {
     const listBack = ["url(/src/assets/back_1.jpg", "url(/src/assets/back_2.jpg", "url(/src/assets/back_3.jpg", "url(/src/assets/back_4.jpg"]
     const randomBack = Math.floor(Math.random() * listBack.length)
     document.body.style.backgroundImage = listBack[randomBack]
 }
-//
-//
-
-
-const task1 = new Task();
-console.log("ConstTask", task1)
-
-const editValue = function (element) {
-    element.addEventListener('dblclick', () => {
-        element.setAttribute('contenteditable', true)
-        element.focus()
-    })
-    element.addEventListener("blur", () => {
-        if (element.innerHTML.length < 1 && element.closest(".task")) {
-            element.closest(".task").remove()
-        }
-
-        element.removeAttribute('contenteditable')
-    })
-}
-
-const eventAddTask = columnElement => {
-    let buttonAddTask = columnElement.querySelector(".add-task")
-    buttonAddTask.addEventListener('click', function () {
-        const taskElement = document.createElement('div')
-        taskElement.classList.add('task')
-        taskElement.setAttribute('data-task-id', taskIdCounter)
-        taskElement.setAttribute('draggable', 'true')
-        taskElement.innerHTML =
-            `<div class="task-text edit"></div>
-            <div></div>`
-
-        columnElement.querySelector('.list-tasks').append(taskElement)
-        taskIdCounter++
-        const titleTaskNewElement = taskElement.querySelector('.edit')
-        editValue(titleTaskNewElement)
-        titleTaskNewElement.setAttribute('contenteditable', true)
-        titleTaskNewElement.focus()
-        addDragnDropEvent(taskElement)
-    })
-    addDragnDropEventColums(columnElement)
-}
-
-
 
 const buttonColumn = document.querySelector(".add-column")
 const chooseColumn = document.querySelectorAll(".column")
 const chooseTask = document.querySelectorAll(".task")
 
-
-
-
-let darggbleTask = null
-let darggbleColumn = null
-
-
-const evenDragStartTask = function (event) {
-    event.stopPropagation()
-    this.classList.add("dragElement")
-    darggbleTask = this
-}
-const evenDragEndTask = function (event) {
-    event.stopPropagation()
-    this.classList.remove("dragElement")
-    darggbleTask = null
-}
-const evenDragEnterTask = function (event) {
-    event.stopPropagation()
-    if (darggbleTask !== this || !darggbleColumn) {
-        // console.log("evenDragEnter", this )
-    }
-
-}
-const evenDragOverTask = function (event) {
-    event.preventDefault()
-    event.stopPropagation()
-    if (darggbleTask !== this || !darggbleColumn) {
-        // console.log("evenDragOver" )
-        // console.log(this )
-    }
-}
-const evenDragLeaveTask = function (event) {
-    event.stopPropagation()
-    if (darggbleTask !== this || !darggbleColumn) {
-        // console.log("evenDragLeave" )
-    }
-}
-const evenDragDropTask = function (event) {
-    event.preventDefault()
-    event.stopPropagation()
-    if (darggbleTask !== this || !darggbleColumn) {
-        // console.log("evenDragDrop", this )
-
-        if (this.parentElement === darggbleTask.parentElement && !darggbleColumn) {
-            const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
-            const x = parentElements.indexOf(this)
-            const y = parentElements.indexOf(darggbleTask)
-            if (x < y) {
-                this.parentElement.insertBefore(darggbleTask, this)
-            } else {
-                this.parentElement.insertBefore(darggbleTask, this.nextElementSibling)
-            }
-        } else {
-            this.parentElement.insertBefore(darggbleTask, this)
-        }
-    }
-}
-//
-///
-//
-const evenDragStartColumn = function (event) {
-    this.classList.add("dragElement")
-    darggbleColumn = this
-    console.log(darggbleColumn)
-
-}
-const evenDragEndColumn = function (event) {
-    this.classList.remove("dragElement")
-    darggbleColumn = null
-}
-const evenDragEnterColumn = function (event) {
-    event.stopPropagation()
-    if (darggbleColumn !== this || !darggbleTask) {
-        // console.log("evenDragEnter", this )
-    }
-
-}
-const evenDragOverColumn = function (event) {
-    event.preventDefault()
-    event.stopPropagation()
-    if (darggbleColumn !== this || !darggbleTask) {
-        // console.log("evenDragOverColumn" )
-    }
-}
-const evenDragLeaveColumn = function (event) {
-    event.stopPropagation()
-    if (darggbleColumn !== this || !darggbleTask) {
-        // console.log("evenDragLeave" )
-    }
-}
-const evenDragDropColumn = function (event) {
-    event.preventDefault()
-    event.stopPropagation()
-    if (darggbleColumn) {
-        if (darggbleColumn !== this && darggbleColumn) {
-            if (this.parentElement === darggbleColumn.parentElement) {
-                const parentElements = Array.from(this.parentElement.querySelectorAll(".column"))
-                const x = parentElements.indexOf(this)
-                const y = parentElements.indexOf(darggbleColumn)
-                if (x < y) {
-                    this.parentElement.insertBefore(darggbleColumn, this)
-                } else {
-                    this.parentElement.insertBefore(darggbleColumn, this.nextElementSibling)
-                }
-            } else {
-                this.parentElement.insertBefore(darggbleColumn, this)
-            }
-
-        }
-    }
-    else if(darggbleTask) {
-        console.log(darggbleTask)
-        this.querySelector(".list-tasks").append(darggbleTask)
-        
-    }
-}
-const addDragnDropEvent = (chooseTask) => {
-    chooseTask.setAttribute('draggable', true)
-    chooseTask.addEventListener("dragstart", evenDragStartTask)
-    chooseTask.addEventListener("dragend", evenDragEndTask)
-    chooseTask.addEventListener("dragenter", evenDragEnterTask)
-    chooseTask.addEventListener("dragover", evenDragOverTask)
-    chooseTask.addEventListener("dragleave", evenDragLeaveTask)
-    chooseTask.addEventListener("drop", evenDragDropTask)
-}
-const addDragnDropEventColums = (columnElement) => {
-    columnElement.setAttribute('draggable', true)
-    columnElement.addEventListener("dragstart", evenDragStartColumn)
-    columnElement.addEventListener("dragend", evenDragEndColumn)
-    columnElement.addEventListener("dragenter", evenDragEnterColumn)
-    columnElement.addEventListener("dragover", evenDragOverColumn)
-    columnElement.addEventListener("dragleave", evenDragLeaveColumn)
-    columnElement.addEventListener("drop", evenDragDropColumn)
-}
-chooseTask.forEach(addDragnDropEvent)
-// console.log(chooseColumn)
-
-chooseColumn.forEach(eventAddTask)
+chooseTask.forEach(Task.addDragnDropEvent)
+chooseColumn.forEach(Column.eventAddTask)
 
 buttonColumn.addEventListener('click', function () {
-    const columnNewElement = document.createElement('div')
-    columnNewElement.classList.add('column')
-    columnNewElement.setAttribute('data-column-id', columnIdCounter)
-    columnNewElement.setAttribute('draggable', true)
-    columnNewElement.innerHTML =
-        `<div class="column-header">
-            <div class="title edit">Done</div>
-            <span class="list-actions"><span>...</span></span>
-        </div>
-        <div class="list-tasks">
-        </div>
-        <button class="add-task">Добавить задачу</button>`
-    document.querySelector('.list-column').append(columnNewElement)
-    columnIdCounter++
-    eventAddTask(columnNewElement)
-    const titleColumnNewElement = columnNewElement.querySelector('.edit')
-    editValue(titleColumnNewElement)
+    document.querySelector('.list-column').append(Column.create())
 })
 
 //Совершает поиск элементов с классом .edit и вешает на них обработчик событий при срабатывании которого можно поменять название блока
-document.querySelectorAll('.edit').forEach(editValue)
+document.querySelectorAll('.edit').forEach(Column.editValue)

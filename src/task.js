@@ -1,91 +1,119 @@
-export default class Task {
-    constructor(id=null, content=''){
-        this.taskElement = document.createElement('div')
-        this.taskElement.classList.add('task')
-        this.taskElement.setAttribute('data-task-id', Task.idCounter)
-        this.taskElement.setAttribute('draggable', 'true')
-        // this.taskElement.innerHTML = 
-        //     `<span class="task-text edit">Создать репозеторий </span>
-        //     <div class="dead-line"><i class="fa fa-clock-o" aria-hidden="true"></i><span>2 фев</span></div>`
-        const taskText = document.createElement("span")
-        taskText.classList.add("task-text")
+const Task = {
+    idCounter: 10,
+    darggbleTask: null,
+    create(id = null, content = "") {
+        let idCounter = id
+        if (!id) {
+            idCounter = Task.idCounter
+        }
+        const taskElement = document.createElement('div')
+        taskElement.classList.add('task')
+        taskElement.setAttribute('data-task-id', idCounter)
+        taskElement.setAttribute('draggable', 'true')
+        const taskEdit = document.createElement("div")
+        taskEdit.classList.add("task-text", "edit")
+        taskEdit.innerHTML = content
+
+        taskEdit.setAttribute('contenteditable', true)
+// TODO: доработать функционал фокуса
+        taskEdit.focus()
+
+        taskEdit.addEventListener("blur", () => {
+            if (taskEdit.innerHTML.length < 1 && taskEdit.closest(".task")) {
+                taskEdit.closest(".task").remove()
+            }
+
+            taskEdit.removeAttribute('contenteditable')
+        })
+
         const taskDeadLine = document.createElement("div")
-        taskDeadLine.classList.add("dead-line")
-        this.taskElement.append(taskText)
-        this.taskElement.append(taskDeadLine)
-
-        this.taskElement.setAttribute('draggable', true)
-        this.taskElement.addEventListener("dragstart", this.evenDragStartTask.bind(this))
-        this.taskElement.addEventListener("dragend", this.evenDragEndTask.bind(this))
-        this.taskElement.addEventListener("dragenter", this.evenDragEnterTask.bind(this))
-        this.taskElement.addEventListener("dragover", this.evenDragOverTask.bind(this))
-        this.taskElement.addEventListener("dragleave", this.evenDragLeaveTask.bind(this))
-        this.taskElement.addEventListener("drop", this.evenDragDropTask.bind(this))
-        
-        // columnElement.querySelector('.list-tasks').append(taskElement)
-        Task.idCounter++
-        // let titleTaskNewElement = taskElement.querySelector('.edit')
-        this.taskElement.addEventListener('dblclick', () => {
-            this.taskElement.setAttribute('contenteditable', true)
-            this.taskElement.focus()
-          })
-          this.taskElement.addEventListener("blur", ()=>{
-            this.taskElement.removeAttribute('contenteditable')
-          })  
-    }
-
+        taskElement.append(taskEdit)
+        taskElement.append(taskDeadLine)
+        if (!id) {
+            Task.idCounter++
+        }
+        Task.addDragnDropEvent(taskElement)
+        Task.editValue(taskEdit)
+        return taskElement
+    },
+    editValue(element) {
+        element.addEventListener('dblclick', () => {
+            element.setAttribute('contenteditable', true)
+            element.focus()
+        })
+        element.addEventListener("blur", () => {
+            if (element.innerHTML.length < 1 && element.closest(".task")) {
+                element.closest(".task").remove()
+            }
+    
+            element.removeAttribute('contenteditable')
+        })
+    },
+    addDragnDropEvent(chooseTask) {
+        chooseTask.setAttribute('draggable', true)
+        chooseTask.addEventListener("dragstart", Task.evenDragStartTask)
+        chooseTask.addEventListener("dragend", Task.evenDragEndTask)
+        chooseTask.addEventListener("dragenter", Task.evenDragEnterTask)
+        chooseTask.addEventListener("dragover", Task.evenDragOverTask)
+        chooseTask.addEventListener("dragleave", Task.evenDragLeaveTask)
+        chooseTask.addEventListener("drop", Task.evenDragDropTask)
+    },
     evenDragStartTask(event) {
         event.stopPropagation()
         this.classList.add("dragElement")
-        Task.draggble = this
-    }
-    evenDragEndTask (event) {
+        Task.darggbleTask = this
+    },
+    evenDragEndTask(event) {
         event.stopPropagation()
         this.classList.remove("dragElement")
-        Task.draggble = null
-    }
+        Task.darggbleTask = null
+    },
     evenDragEnterTask(event) {
         event.stopPropagation()
-        if(Task.draggble !== this) { 
+        if (Task.darggbleTask !== this) {
             // console.log("evenDragEnter", this )
-        }    
-    }
+        }
+
+    },
     evenDragOverTask(event) {
         event.preventDefault()
         event.stopPropagation()
-        if(Task.draggble !== this) {
-        // console.log("evenDragOver" )
-        // console.log(this )
+        if (Task.darggbleTask !== this) {
+            // console.log("evenDragOver" )
+            // console.log(this )
         }
-    }
-    evenDragLeaveTask = function(event) {
+    },
+    evenDragLeaveTask(event) {
         event.stopPropagation()
-        if(Task.draggble !== this) {
-        // console.log("evenDragLeave" )
+        if (Task.darggbleTask !== this) {
+            // console.log("evenDragLeave" )
         }
-    }
-    evenDragDropTask = function(event) {
+    },
+    evenDragDropTask(event) {
         event.preventDefault()
         event.stopPropagation()
-        if(Task.draggble !== this) {
-        // console.log("evenDragDrop", this )
-        
-        if(this.parentElement === Task.draggble.parentElement){
-            const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
-            const x = parentElements.indexOf(this)
-            const y = parentElements.indexOf(Task.draggble)
-            if(x < y) {
-                this.parentElement.insertBefore(Task.draggble, this)
-            }
-            else{
-                this.parentElement.insertBefore(Task.draggble, this.nextElementSibling)
+        if (Task.darggbleTask !== this) {
+            // console.log("evenDragDrop", this )
+            
+// TODO: добавить условие исключения переноса колонки в задачу, т.к. при переносе в консоли появляется ошибка
+            if (this.parentElement === Task.darggbleTask.parentElement) {
+                const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
+                const x = parentElements.indexOf(this)
+                const y = parentElements.indexOf(Task.darggbleTask)
+                if (x < y) {
+                    this.parentElement.insertBefore(Task.darggbleTask, this)
+                } else {
+                    this.parentElement.insertBefore(Task.darggbleTask, this.nextElementSibling)
+                }
+            } else {
+                this.parentElement.insertBefore(Task.darggbleTask, this)
             }
         }
-        else{
-            this.parentElement.insertBefore(Task.draggble, this)
-        }
-    }
-    }
+    },
+
+
 }
-Task.idCounter = 10
-Task.draggble = null
+
+export {
+    Task
+}
