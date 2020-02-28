@@ -1,26 +1,32 @@
-import { Task } from "./task.js"
+import {
+    Task
+} from "./task"
+import {
+    Send
+} from "./sendBack"
 
 
 const Column = {
     idCounter: 4,
     darggbleColumn: null,
+
     create(id = null, title = "Done") {
         let idCounter = id
-        if (!id){
+        if (!id) {
             idCounter = Column.idCounter
         }
         const columnNewElement = document.createElement('div')
         columnNewElement.classList.add('column')
         columnNewElement.setAttribute('data-column-id', idCounter)
         columnNewElement.setAttribute('draggable', true)
-        
+
         const columnHead = document.createElement("div")
         columnHead.classList.add("column-header")
 
         const columnTitle = document.createElement("div")
         columnTitle.classList.add("title", "edit")
         columnTitle.innerHTML = title
-        
+
         const actionList = document.createElement("span")
         actionList.classList.add("list-actions")
         actionList.innerHTML = `<span>...</span>`
@@ -50,19 +56,37 @@ const Column = {
         return columnNewElement
 
     },
+
     editValue(element) {
+        let firstText
         element.addEventListener('dblclick', () => {
             element.setAttribute('contenteditable', true)
             element.focus()
+            firstText = element.innerHTML
         })
         element.addEventListener("blur", () => {
             if (element.innerHTML.length < 1 && element.closest(".task")) {
                 element.closest(".task").remove()
             }
-    
             element.removeAttribute('contenteditable')
+            if (firstText !== element.innerHTML) {
+                Column.saveTask(element)
+            }
         })
     },
+
+    saveTask(element) {
+        const body = {
+            idParent: element.closest('.column').getAttribute('data-column-id'),
+            text: element.innerHTML
+        }
+        const id = element.parentElement.getAttribute('data-task-id')
+        if (id) {
+            body.id = id
+        }
+        Send.sendToBack("http://localhost:8000/", body, "POST")
+    },
+
     eventAddTask(columnElement) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
@@ -70,7 +94,8 @@ const Column = {
         })
         Column.addDragnDropEventColums(columnElement)
     },
-    addDragnDropEventColums(columnElement){
+
+    addDragnDropEventColums(columnElement) {
         columnElement.setAttribute('draggable', true)
         columnElement.addEventListener("dragstart", Column.evenDragStartColumn)
         columnElement.addEventListener("dragend", Column.evenDragEndColumn)
@@ -79,35 +104,30 @@ const Column = {
         columnElement.addEventListener("dragleave", Column.evenDragLeaveColumn)
         columnElement.addEventListener("drop", Column.evenDragDropColumn)
     },
-    evenDragStartColumn(event) {
+
+    evenDragStartColumn() {
         this.classList.add("dragElement")
         Column.darggbleColumn = this
-        // console.log(Column.darggbleColumn)
     },
-    evenDragEndColumn(event) {
+
+    evenDragEndColumn() {
         this.classList.remove("dragElement")
         Column.darggbleColumn = null
     },
+
     evenDragEnterColumn(event) {
         event.stopPropagation()
-        if (Column.darggbleColumn !== this || !Task.darggbleTask) {
-            // console.log("evenDragEnter", this )
-        }
-    
     },
+
     evenDragOverColumn(event) {
         event.preventDefault()
         event.stopPropagation()
-        if (Column.darggbleColumn !== this || !Task.darggbleTask) {
-            // console.log("evenDragOverColumn" )
-        }
     },
+
     evenDragLeaveColumn(event) {
         event.stopPropagation()
-        if (Column.darggbleColumn !== this || !Task.darggbleTask) {
-            // console.log("evenDragLeave" )
-        }
     },
+
     evenDragDropColumn(event) {
         event.preventDefault()
         event.stopPropagation()
@@ -125,15 +145,14 @@ const Column = {
                 } else {
                     this.parentElement.insertBefore(Column.darggbleColumn, this)
                 }
-    
+
             }
-        }
-        else if(Task.darggbleTask) {
+        } else if (Task.darggbleTask) {
             this.querySelector(".list-tasks").append(Task.darggbleTask)
-            
         }
     }
 }
+
 export {
     Column
 }

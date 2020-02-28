@@ -1,6 +1,7 @@
 const Task = {
     idCounter: 10,
     darggbleTask: null,
+
     create(id = null, content = "") {
         let idCounter = id
         if (!id) {
@@ -15,7 +16,7 @@ const Task = {
         taskEdit.innerHTML = content
 
         taskEdit.setAttribute('contenteditable', true)
-// TODO: доработать функционал фокуса
+        // TODO: доработать функционал фокуса
         taskEdit.focus()
 
         taskEdit.addEventListener("blur", () => {
@@ -36,6 +37,7 @@ const Task = {
         Task.editValue(taskEdit)
         return taskElement
     },
+
     editValue(element) {
         element.addEventListener('dblclick', () => {
             element.setAttribute('contenteditable', true)
@@ -45,10 +47,11 @@ const Task = {
             if (element.innerHTML.length < 1 && element.closest(".task")) {
                 element.closest(".task").remove()
             }
-    
+
             element.removeAttribute('contenteditable')
         })
     },
+
     addDragnDropEvent(chooseTask) {
         chooseTask.setAttribute('draggable', true)
         chooseTask.addEventListener("dragstart", Task.evenDragStartTask)
@@ -58,44 +61,37 @@ const Task = {
         chooseTask.addEventListener("dragleave", Task.evenDragLeaveTask)
         chooseTask.addEventListener("drop", Task.evenDragDropTask)
     },
+
     evenDragStartTask(event) {
         event.stopPropagation()
         this.classList.add("dragElement")
         Task.darggbleTask = this
     },
+
     evenDragEndTask(event) {
         event.stopPropagation()
         this.classList.remove("dragElement")
         Task.darggbleTask = null
     },
+
     evenDragEnterTask(event) {
         event.stopPropagation()
-        if (Task.darggbleTask !== this) {
-            // console.log("evenDragEnter", this )
-        }
-
     },
+
     evenDragOverTask(event) {
         event.preventDefault()
         event.stopPropagation()
-        if (Task.darggbleTask !== this) {
-            // console.log("evenDragOver" )
-            // console.log(this )
-        }
     },
+
     evenDragLeaveTask(event) {
         event.stopPropagation()
-        if (Task.darggbleTask !== this) {
-            // console.log("evenDragLeave" )
-        }
     },
+
     evenDragDropTask(event) {
         event.preventDefault()
         event.stopPropagation()
         if (Task.darggbleTask !== this) {
-            // console.log("evenDragDrop", this )
-            
-// TODO: добавить условие исключения переноса колонки в задачу, т.к. при переносе в консоли появляется ошибка
+            // TODO: добавить условие исключения переноса колонки в задачу, т.к. при переносе в консоли появляется ошибка
             if (this.parentElement === Task.darggbleTask.parentElement) {
                 const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
                 const x = parentElements.indexOf(this)
@@ -110,8 +106,6 @@ const Task = {
             }
         }
     },
-
-
 }
 
 export {
