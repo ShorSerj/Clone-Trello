@@ -69,7 +69,7 @@ const Column = {
                 element.closest(".task").remove()
             }
             element.removeAttribute('contenteditable')
-            if (firstText !== element.innerHTML) {
+            if (firstText !== element.innerHTML){
                 Column.saveTask(element)
             }
         })
