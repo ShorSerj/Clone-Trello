@@ -70,12 +70,12 @@ const Column = {
             }
             element.removeAttribute('contenteditable')
             if (firstText !== element.innerHTML){
-                Column.saveTask(element)
+                Column.saveColumn(element)
             }
         })
     },
 
-    saveTask(element) {
+    saveColumn(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
@@ -84,7 +84,7 @@ const Column = {
         if (id) {
             body.id = id
         }
-        Send.sendToBack("http://localhost:8000/", body, "POST")
+        Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
     },
 
     eventAddTask(columnElement) {

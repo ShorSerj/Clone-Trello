@@ -1,12 +1,14 @@
 const path = require('path')
 const HTMLWebpackPlagin = require('html-webpack-plugin')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 
-const isDev = process.env.NODE_ENV === 'development' ;
+const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev
 
 const optimization = () => {
@@ -17,7 +19,7 @@ const optimization = () => {
     }
 
 
-    if(isProd) {
+    if (isProd) {
         config.minimizer = [
             new OptimizeCssAssetsWebpackPlugin(),
             new TerserWebpackPlugin()
@@ -30,50 +32,47 @@ const optimization = () => {
 const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
 
 const cssLoaders = extra => {
-    const loaders = [
-        {
+    const loaders = [{
             loader: MiniCssExtractPlugin.loader,
             options: {
                 hmr: isDev,
                 reloadAll: true
             }
-         },
-         "css-loader"
+        },
+        "css-loader"
     ]
 
-    if(extra){
+    if (extra) {
         loaders.push(extra)
     }
 
     return loaders
 }
 
-const babelOptions = preset =>{
+const babelOptions = preset => {
     const options = {
         presets: [
-           '@babel/preset-env',
-           
+            '@babel/preset-env',
+
         ],
         plugins: [
             '@babel/plugin-proposal-class-properties'
         ]
     }
 
-    if(preset) {
+    if (preset) {
         options.presets.push(preset)
     }
     return options
 };
 
 const jsLoader = () => {
-    const loader = [
-        {
+    const loader = [{
         loader: "babel-loader",
         options: babelOptions()
-    }
-];
+    }];
 
-    if(isDev) {
+    if (isDev) {
         loader.push('eslint-loader')
     }
 
@@ -85,17 +84,19 @@ module.exports = {
     mode: 'development',
     entry: {
         main: ['@babel/polyfill', './index.js'],
-        analytics: './analytics.ts'        
+        analytics: './analytics.ts'
     },
     output: {
         filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
     },
+
     resolve: {
         extensions: ['.js', '.json', '.png'],
         alias: {
-            '@models' : path.resolve(__dirname, 'src/models'),
-            '@' : path.resolve(__dirname, 'src')
+            '@models': path.resolve(__dirname, 'src/models'),
+            '@': path.resolve(__dirname, 'src'),
+            images: path.resolve(__dirname, '/img'),
         }
     },
     optimization: optimization(),
@@ -112,14 +113,15 @@ module.exports = {
             }
         }),
         new CleanWebpackPlugin(),
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, 'src/favicon.ico'), 
-                to: path.resolve(__dirname, 'dist')
-            }
-        ]),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname, 'src/favicon.ico'),
+            to: path.resolve(__dirname, 'dist')
+        }, {
+            from: path.resolve(__dirname, 'src/assets'),
+            to: path.resolve(__dirname, 'dist/img')
+        }]),
         new MiniCssExtractPlugin({
-           filename: filename('css'),
+            filename: filename('css'),
         })
     ],
     module: {
@@ -129,50 +131,50 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: cssLoaders("less-loader") 
+                use: cssLoaders("less-loader")
             },
             {
                 test: /\.s[ac]ss$/,
-                use: cssLoaders("sass-loader") 
+                use: cssLoaders("sass-loader")
             },
-        {
-            test: /\.(png|jpg|svg|gif)$/,
-            use: ["file-loader"]
-        },
-        {
-            test: /\.(ttf|woff|woff2|eot)$/,
-            use: ["file-loader"]
-        },
-        {
-            test: /\.xml$/,
-            use: ["xml-loader"]
-        },
-        {
-            test: /\.csv$/,
-            use: ["csv-loader"]
-        },
-        { 
-            test: /\.js$/, 
-            exclude: /node_modules/, 
-            use: jsLoader()
-        },
-        {
-            test: /\.ts$/,
-            exclude: /node_modules/,
-            loader: {
-                loader: "babel-loader",
-                options: babelOptions('@babel/preset-typescript')
+            {
+                test: /\.(png|jpg|svg|gif)$/,
+                use: ["file-loader"]
+            },
+            {
+                test: /\.(ttf|woff|woff2|eot)$/,
+                use: ["file-loader"]
+            },
+            {
+                test: /\.xml$/,
+                use: ["xml-loader"]
+            },
+            {
+                test: /\.csv$/,
+                use: ["csv-loader"]
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: jsLoader()
+            },
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                loader: {
+                    loader: "babel-loader",
+                    options: babelOptions('@babel/preset-typescript')
+                }
+            },
+            {
+                test: /\.jsx$/,
+                exclude: /node_modules/,
+                loader: {
+                    loader: "babel-loader",
+                    options: babelOptions('@babel/preset-react')
+                }
             }
-        },
-        {
-            test: /\.jsx$/,
-            exclude: /node_modules/,
-            loader: {
-                loader: "babel-loader",
-                options: babelOptions('@babel/preset-react')
-            }
-        }
-    ]
+        ]
     }
 
 }

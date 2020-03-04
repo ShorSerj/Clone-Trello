@@ -16,7 +16,6 @@
 }   
 
 $mainBackground:  no-repeat;
-$logo: url(/src/assets/logo.png) no-repeat;
 
 body {
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
@@ -56,7 +55,6 @@ header {
         };
         
         .logo {
-            background: $logo;
             height: 30px;
             width: 80px;
             background-size: 80px 30px;

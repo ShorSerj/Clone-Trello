@@ -1,3 +1,4 @@
+import {response} from "./index.js"
 const Send = {
     // 
     sendToBack(url, body, method) {
@@ -7,18 +8,18 @@ const Send = {
         xhr.setRequestHeader('Content-Type', 'application/json')
 
         xhr.send(JSON.stringify(body))
-
+        // console.log(body)
 
         // 4. Этот код сработает после того, как мы получим ответ сервера
         xhr.onload = function () {
-
             if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
                 // alert(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
             } else { // если всё прошло гладко, выводим результат
                 // alert(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
-                console.log(xhr.response)
+                // console.log(xhr.response)
+                response.value = xhr.response
             }
-        };
+        }; 
 
         xhr.onprogress = function (event) { // запускается периодически
             if (event.lengthComputable) {
@@ -36,7 +37,6 @@ const Send = {
             // alert("Запрос не удался");
         };
     }
-
 }
 export {
     Send

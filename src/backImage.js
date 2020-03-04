@@ -1,5 +1,5 @@
 const BackImage = {
-    basicImage: ["url(/src/assets/back_1.jpg)"],
+    basicImage: ["url(../img/back_1.jpg)"],
 
     changeBack(backList = null) {
         let img

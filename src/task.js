@@ -1,3 +1,6 @@
+import {
+    Send
+} from "./sendBack"
 const Task = {
     idCounter: 10,
     darggbleTask: null,
@@ -25,6 +28,7 @@ const Task = {
             }
 
             taskEdit.removeAttribute('contenteditable')
+
         })
 
         const taskDeadLine = document.createElement("div")
@@ -39,9 +43,11 @@ const Task = {
     },
 
     editValue(element) {
+        let firstTextTask
         element.addEventListener('dblclick', () => {
             element.setAttribute('contenteditable', true)
             element.focus()
+            firstTextTask = element.innerHTML
         })
         element.addEventListener("blur", () => {
             if (element.innerHTML.length < 1 && element.closest(".task")) {
@@ -49,7 +55,25 @@ const Task = {
             }
 
             element.removeAttribute('contenteditable')
+            if (firstTextTask !== element.innerHTML) {
+                Task.saveTask(element)
+            }
         })
+    },
+
+    saveTask(element) { 
+        console.log(element)
+        console.log(element.parentElement)
+        const body = {
+            idParent: element.closest('.column').getAttribute('data-column-id'),
+            text: element.innerHTML
+        }
+        const id = element.parentElement.getAttribute('data-task-id')
+        
+        if (id) {
+            body.id = id
+        }
+        Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
     },
 
     addDragnDropEvent(chooseTask) {
