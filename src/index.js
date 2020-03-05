@@ -47,5 +47,6 @@ window.onload = () => {
 const buttonColumn = document.querySelector(".add-column")
 
 buttonColumn.addEventListener('click', function () {
-    document.querySelector('.list-column').append(Column.create())
+    let id = Column.findIdColumn()
+    document.querySelector('.list-column').append(Column.create(id))
 })

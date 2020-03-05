@@ -57,6 +57,18 @@ const Column = {
 
     },
 
+    findIdColumn() {
+        let idTasks = document.querySelectorAll('.column')
+        let id = 1
+        idTasks.forEach((elem) => {
+            let idThisTask = elem.getAttribute('data-column-id')
+            if (Number(idThisTask) > id) {
+                id = idThisTask
+            }
+        })
+        id++
+        return id
+    },
     editValue(element) {
         let firstText
         element.addEventListener('dblclick', () => {
@@ -69,7 +81,7 @@ const Column = {
                 element.closest(".task").remove()
             }
             element.removeAttribute('contenteditable')
-            if (firstText !== element.innerHTML){
+            if (firstText !== element.innerHTML) {
                 Column.saveColumn(element)
             }
         })
@@ -90,7 +102,9 @@ const Column = {
     eventAddTask(columnElement) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
-            columnElement.querySelector('.list-tasks').append(Task.create())
+            let id = Task.findIdTask()
+            console.log(id)
+            columnElement.querySelector('.list-tasks').append(Task.create(id))
         })
         Column.addDragnDropEventColums(columnElement)
     },

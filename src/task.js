@@ -42,6 +42,19 @@ const Task = {
         return taskElement
     },
 
+    findIdTask() {
+        let idTasks = document.querySelectorAll('.task')
+        let id = 1
+        idTasks.forEach((elem) => {
+            let idThisTask = elem.getAttribute('data-task-id')
+            if (Number(idThisTask) > id) {
+                id = idThisTask
+            }
+        })
+        id++
+        return id
+    },
+
     editValue(element) {
         let firstTextTask
         element.addEventListener('dblclick', () => {
@@ -61,15 +74,13 @@ const Task = {
         })
     },
 
-    saveTask(element) { 
-        console.log(element)
-        console.log(element.parentElement)
+    saveTask(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
         }
         const id = element.parentElement.getAttribute('data-task-id')
-        
+
         if (id) {
             body.id = id
         }

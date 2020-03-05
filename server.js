@@ -9,8 +9,11 @@ const app = express();
 app.use(express.static(__dirname + "/dist"));
 app.use(bodyParser.json());
 
+fs.createWriteStream(__dirname + 'createHistory.txt')
+
 app.get('/tasks', (req, res) => {
     const fPath = path.resolve(__dirname, 'src/response.json')
+
     fs.readFile(fPath, (err, data) => {
         if (err) {
             throw err;
@@ -20,11 +23,25 @@ app.get('/tasks', (req, res) => {
 });
 
 app.post('/fixTitleColumn', (req, res) => {
-    console.log(req.body);
+    let id = req.body
+    for (let key in id) {
+        console.log(key + ": " + id[key]);
+        fs.appendFile('createHistory.txt', key + ": " + id[key] + "   ", function (error) {
+            if (error) throw error;
+        });
+    }
+    res.send()
 });
 
 app.post('/fixTitleTask', (req, res) => {
-    console.log(req.body);
+    let id = req.body
+    for (let key in id) {
+        console.log(key + ": " + id[key]);
+        fs.appendFile('createHistory.txt', key + ": " + id[key] + "   ", function (error) {
+            if (error) throw error;
+        });
+    }
+    res.send()
 });
 
 const PORT = process.env.PORT || 8000;
