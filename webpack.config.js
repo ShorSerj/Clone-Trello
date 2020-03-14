@@ -83,8 +83,8 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
-        main: ['@babel/polyfill', './index.js'],
-        analytics: './analytics.ts'
+        main: ['@babel/polyfill', './index.js']
+        // analytics: './analytics.ts'
     },
     output: {
         filename: filename('js'),

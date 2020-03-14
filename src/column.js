@@ -4,7 +4,7 @@ import {
 import {
     Send
 } from "./sendBack"
-
+const axios = require('axios').default;
 
 const Column = {
     idCounter: 4,
@@ -96,7 +96,19 @@ const Column = {
         if (id) {
             body.id = id
         }
-        Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
+        // Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
+        axios.post('/fixTitleColumn', body)
+            .then(function (response) {
+                console.log('element fixed',response)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+
     },
 
     eventAddTask(columnElement) {

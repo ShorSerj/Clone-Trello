@@ -16,30 +16,68 @@ import {
     Send
 } from "./sendBack"
 
-export let response = {value: ""}
+const axios = require('axios').default;
 
-Send.sendToBack('/tasks', "", "GET");
+axios.get('/tasks')
+    .then(function (response) {
+        console.log('response/axios', response)
+        // handle success
+        if (response.data.status.code != 0) {
+            console.log("Ошибка")
+        }
+
+        let content = response.data.content
+        if (content.length > 0) {
+            const listColumns = document.querySelector('.list-column')
+            content.forEach((element) => {
+                const columnNew = Column.create(element.id, element.name)
+                const list = columnNew.querySelector(".list-tasks")
+                element.tasks.forEach((task) => {
+                    const taskNew = Task.create(task.id, task.text)
+                    list.append(taskNew)
+                })
+                listColumns.append(columnNew)
+            })
+        }
+
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
+
+// export let response = {value: ""}
+
+const result = Send.sendToBack('/tasks', "", "GET");
+console.log('resultat', result)
+// function get(url) {
+//     return new Promise(function(succeed, fail) {
+//       var request = new XMLHttpRequest();
+//       request.open("GET", url, true);
+//       request.addEventListener("load", function() {
+//         if (request.status < 400)
+//           succeed(request.response);
+//         else
+//           fail(new Error("Request failed: " + request.statusText));
+//       });
+//       request.addEventListener("error", function() {
+//         fail(new Error("Network error"));
+//       });
+//       request.send();
+//     });
+//   }
+
+//   get("http://localhost:3001/tasks").then(function(text) {
+//   console.log('someText',text);
+// }, function(error) {
+//   console.log("Error!!!");
+//   console.log(error);
+// });
 
 window.onload = () => {
-
-    if (response.value.status.code != 0) {
-        console.log("Ошибка")
-    }
-
-    let content = response.value.content
-    if (content.length > 0) {
-        const listColumns = document.querySelector('.list-column')
-        content.forEach((element) => {
-            const columnNew = Column.create(element.id, element.name)
-            const list = columnNew.querySelector(".list-tasks")
-            element.tasks.forEach((task) => {
-                const taskNew = Task.create(task.id, task.text)
-                list.append(taskNew)
-            })
-            listColumns.append(columnNew)
-        })
-    }
-
     const listBack = ["url(../img/back_1.jpg", "url(../img/back_2.jpg", "url(../img/back_3.jpg", "url(../img/back_4.jpg"]
     BackImage.changeBack(listBack)
 }

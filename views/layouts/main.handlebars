@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clone Trello</title>
+</head>
+
+<body>
+    {{#if showTests}}
+    <link rel="stylesheet" href="/vendor/mocha.css">
+    {{/if}}
+
+    <header><img src="/img/logo_bord.png" alt="home" /></header>
+    {{{body}}}
+
+    {{#if showTests}}
+    <div id="mocha"></div>
+    <script src="/vendor/mocha.js"></script>
+    <script src="/vendor/chai.js"></script>
+    <script>
+        mocha.ui('tdd')
+        const assert = chai.assert
+    </script>
+    <script src="/qa/tests-global.js"></script>
+    {{#if pageTestsScripts}}
+    <script src="{{pageTestsScripts}}"></script>
+    {{/if}}
+    <script>
+        mocha.run()
+    </script>
+    {{/if}}
+</body>
+
+</html>
