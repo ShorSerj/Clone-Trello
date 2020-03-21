@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
     "expressServer": "cross-env PORT=3001 nodemon serverExpress.js",
     "startServer": "cross-env PORT=3001 nodemon startServer.js",
-    "test-unit": "mocha -u tdd -R spec qa/tests-advice.js"
+    "test-unit": "mocha --require @babel/register -u tdd -R spec qa/tests-backimg.js "
   },
   "browserslist": "> 0.25%, not dead",
   "author": "",
@@ -21,6 +21,7 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
+    "@babel/register": "^7.9.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
@@ -58,6 +59,7 @@
     "express-handlebars": "^3.1.0",
     "jquery": "^3.4.1",
     "loadash": "^1.0.0",
+    "mongoose": "^5.9.5",
     "mysql": "^2.18.1",
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",

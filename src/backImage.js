@@ -8,8 +8,7 @@ const BackImage = {
         } else {
             img = backList[Math.floor(Math.random() * backList.length)]
         }
-
-        document.body.style.backgroundImage = img
+        return img
     }
 }
 

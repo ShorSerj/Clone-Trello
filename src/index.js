@@ -78,7 +78,7 @@ console.log('resultat', result)
 
 window.onload = () => {
     const listBack = ["url(../img/back_1.jpg", "url(../img/back_2.jpg", "url(../img/back_3.jpg", "url(../img/back_4.jpg"]
-    BackImage.changeBack(listBack)
+    document.body.style.backgroundImage = BackImage.changeBack(listBack)
 }
 
 const buttonColumn = document.querySelector(".add-column")
