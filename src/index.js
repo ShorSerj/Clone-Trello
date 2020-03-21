@@ -50,7 +50,6 @@ axios.get('/tasks')
     });
 
 // export let response = {value: ""}
-
 const result = Send.sendToBack('/tasks', "", "GET");
 console.log('resultat', result)
 // function get(url) {
