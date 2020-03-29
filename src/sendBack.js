@@ -1,6 +1,4 @@
-import {
-    response
-} from "./index.js"
+
 const Send = {
     // 
     example() {
@@ -24,7 +22,7 @@ const Send = {
                         // alert(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
                     } else { // если всё прошло гладко, выводим результат
                         // alert(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
-                        console.log('This is xhr', xhr.response)
+                        // console.log('This is xhr', xhr.response)
                         // response.value = xhr.response
                         // return xhr.response
                         succeed(xhr.response)
@@ -49,7 +47,7 @@ const Send = {
             })
         }
         get(url).then(function(text) {
-            console.log('someText', text)
+            // console.log('someText', text)
             return text
         }, function(error) {
             console.log(error);

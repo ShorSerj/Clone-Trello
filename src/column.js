@@ -44,7 +44,7 @@ const Column = {
         columnNewElement.append(columnHead)
         columnNewElement.append(listTask)
         columnNewElement.append(addTask)
-
+        
         Column.eventAddTask(columnNewElement)
         Column.editValue(columnTitle)
 
@@ -52,13 +52,12 @@ const Column = {
             Column.idCounter++
         }
 
-
+        
         return columnNewElement
 
     },
 
-    findIdColumn() {
-        let idTasks = document.querySelectorAll('.column')
+    findIdColumn(idTasks) {
         let id = 1
         idTasks.forEach((elem) => {
             let idThisTask = elem.getAttribute('data-column-id')
@@ -68,7 +67,8 @@ const Column = {
         })
         id++
         return id
-    },
+    }, 
+
     editValue(element) {
         let firstText
         element.addEventListener('dblclick', () => {
@@ -91,6 +91,7 @@ const Column = {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
+            
         }
         const id = element.parentElement.getAttribute('data-task-id')
         if (id) {
@@ -114,8 +115,8 @@ const Column = {
     eventAddTask(columnElement) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
-            let id = Task.findIdTask()
-            console.log(id)
+            let idTasks = document.querySelectorAll('.task')
+            let id = Task.findIdTask(idTasks)
             columnElement.querySelector('.list-tasks').append(Task.create(id))
         })
         Column.addDragnDropEventColums(columnElement)
@@ -158,7 +159,7 @@ const Column = {
         event.preventDefault()
         event.stopPropagation()
         if (Column.darggbleColumn) {
-            if (Column.darggbleColumn !== this && Column.darggbleColumn) {
+            if (Column.darggbleColumn !== this && Column.darggbleColumn) { 
                 if (this.parentElement === Column.darggbleColumn.parentElement) {
                     const parentElements = Array.from(this.parentElement.querySelectorAll(".column"))
                     const x = parentElements.indexOf(this)
@@ -169,11 +170,14 @@ const Column = {
                         this.parentElement.insertBefore(Column.darggbleColumn, this.nextElementSibling)
                     }
                 } else {
+                    console.log(JSON.stringify(this.parentElement))
+                    
                     this.parentElement.insertBefore(Column.darggbleColumn, this)
                 }
 
             }
         } else if (Task.darggbleTask) {
+            console.log(Task.darggbleTask)
             this.querySelector(".list-tasks").append(Task.darggbleTask)
         }
     }

@@ -7,7 +7,7 @@ const BackImage = {
             img = BackImage.basicImage
         } else {
             img = backList[Math.floor(Math.random() * backList.length)]
-        }
+        } 
         return img
     }
 }

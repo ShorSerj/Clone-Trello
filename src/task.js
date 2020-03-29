@@ -15,6 +15,7 @@ const Task = {
         taskElement.setAttribute('data-task-id', idCounter)
         taskElement.setAttribute('draggable', 'true')
         const taskEdit = document.createElement("div")
+        taskEdit.setAttribute('tabindex', 1)
         taskEdit.classList.add("task-text", "edit")
         taskEdit.innerHTML = content
 
@@ -42,8 +43,7 @@ const Task = {
         return taskElement
     },
 
-    findIdTask() {
-        let idTasks = document.querySelectorAll('.task')
+    findIdTask(idTasks) {
         let id = 1
         idTasks.forEach((elem) => {
             let idThisTask = elem.getAttribute('data-task-id')
@@ -98,8 +98,10 @@ const Task = {
     },
 
     evenDragStartTask(event) {
+        console.log(this.innerHTML)
         event.stopPropagation()
         this.classList.add("dragElement")
+        console.log(this.outerHTML)
         Task.darggbleTask = this
     },
 
@@ -126,7 +128,6 @@ const Task = {
         event.preventDefault()
         event.stopPropagation()
         if (Task.darggbleTask !== this) {
-            // TODO: добавить условие исключения переноса колонки в задачу, т.к. при переносе в консоли появляется ошибка
             if (this.parentElement === Task.darggbleTask.parentElement) {
                 const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
                 const x = parentElements.indexOf(this)

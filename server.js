@@ -25,7 +25,7 @@ app.get('/tasks', (req, res) => {
 app.post('/fixTitleColumn', (req, res) => {
     let id = req.body
     for (let key in id) {
-        console.log(key + ": " + id[key]);
+        // console.log(key + ": " + id[key]);
         fs.appendFile('createHistory.txt', key + ": " + id[key] + "   ", function (error) {
             if (error) throw error;
         });
@@ -36,7 +36,7 @@ app.post('/fixTitleColumn', (req, res) => {
 app.post('/fixTitleTask', (req, res) => {
     let id = req.body
     for (let key in id) {
-        console.log(key + ": " + id[key]);
+        // console.log(key + ": " + id[key]);
         fs.appendFile('createHistory.txt', key + ": " + id[key] + "   ", function (error) {
             if (error) throw error;
         });

@@ -20,7 +20,7 @@ const axios = require('axios').default;
 
 axios.get('/tasks')
     .then(function (response) {
-        console.log('response/axios', response)
+        // console.log('response/axios', response)
         // handle success
         if (response.data.status.code != 0) {
             console.log("Ошибка")
@@ -51,7 +51,7 @@ axios.get('/tasks')
 
 // export let response = {value: ""}
 const result = Send.sendToBack('/tasks', "", "GET");
-console.log('resultat', result)
+// console.log('resultat', result)
 // function get(url) {
 //     return new Promise(function(succeed, fail) {
 //       var request = new XMLHttpRequest();
@@ -77,13 +77,16 @@ console.log('resultat', result)
 // });
 
 window.onload = () => {
-    const listBack = ["url(../img/back_1.jpg", "url(../img/back_2.jpg", "url(../img/back_3.jpg", "url(../img/back_4.jpg"]
+    const listBack = ["url(../img/back_1.jpg)", "url(../img/back_2.jpg)", "url(../img/back_3.jpg)", "url(../img/back_4.jpg)"]
     document.body.style.backgroundImage = BackImage.changeBack(listBack)
 }
 
 const buttonColumn = document.querySelector(".add-column")
 
 buttonColumn.addEventListener('click', function () {
-    let id = Column.findIdColumn()
+    let idTasks = document.querySelectorAll('.column')
+    let id = Column.findIdColumn(idTasks)
+    console.log(id)
+    console.log(Column.create(id))
     document.querySelector('.list-column').append(Column.create(id))
 })
