@@ -27,6 +27,7 @@ app.use(express.static('./dist'))
 app.set('port', process.env.PORT || 3000)
 
 app.get('/tasks', function (req, res) {
+    console.log('i get!')
     // Tasks.find({}, function (err, docs) {
     //     if (err) return console.log(err);
     //     console.log(docs);

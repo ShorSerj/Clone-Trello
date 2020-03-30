@@ -97,11 +97,11 @@ const Column = {
         if (id) {
             body.id = id
         }
-        console.log('body', body)
+        // console.log('body', body)
         // Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
         axios.post('/fixTitleColumn', body)
             .then(function (response) {
-                console.log('element fixed',response)
+                // console.log('element fixed',response)
             })
             .catch(function (error) {
                 // handle error

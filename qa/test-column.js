@@ -139,7 +139,7 @@ let evenDragStartColumn = new MouseEvent('dragstart', {
 columnElement.dispatchEvent(evenDragStartColumn)
 let darggbleColumn = column.Column.darggbleColumn
 let checkStart = Boolean(domColumn.window.document.querySelector('.dragElement') && column.Column.darggbleColumn)
-console.log(checkStart)
+// console.log(checkStart)
 
 
 let evenDragEndColumn = new MouseEvent('dragend', {
@@ -149,7 +149,7 @@ let evenDragEndColumn = new MouseEvent('dragend', {
 });
 columnElement.dispatchEvent(evenDragEndColumn)
 let checkEnd = Boolean(!domColumn.window.document.querySelector('.dragElement') && !column.Column.darggbleColumn)
-console.log(checkEnd)
+// console.log(checkEnd)
 
 
 let evenDragDropColumn = new MouseEvent('drop', {

@@ -1,4 +1,4 @@
-const send = require('../src/sendBack.js')
+const send = require('../src/sendToBack.js')
 const expect = require('chai').expect
 const assert = require('chai').assert
 const express = require('express');
@@ -7,11 +7,22 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
 
-const jsdom = require("jsdom");
-const {
-    JSDOM
-} = jsdom;
+app.use(bodyParser.json());
 
+app.post('/fixTitleTask', (req, res) => {
+    // console.log(req.body)
+    res.type('json').send(body)
+});
+
+const PORT = process.env.PORT || 8000;
+// Start the server
+const server = app.listen(PORT, (error) => {
+    if (error) {
+        throw error
+    }
+
+    console.log(`Server listening on port ${PORT}`);
+});
 ///////////////////////////////////////////
 //sendToBack 
 //Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
@@ -21,18 +32,5 @@ const body = {
     text:'sometext',
     id: 16
 }
+send.Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
 
-send.Send.sendToBack("/fixTitleTask", body, "POST")
-
-app.post("/fixTitleTask", (req, res) => {
-    console.log('i see you')
-    res.send()
-});
-
-const PORT = 8000;
-const server = app.listen(PORT, (error) => {
-    if (error) {
-        throw error
-    }
-    console.log(`Server listening on port ${PORT}`);
-});
