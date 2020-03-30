@@ -58,6 +58,7 @@ const Task = {
     editValue(element) {
         let firstTextTask
         element.addEventListener('dblclick', () => {
+            // console.log(element)
             element.setAttribute('contenteditable', true)
             element.focus()
             firstTextTask = element.innerHTML
@@ -98,10 +99,8 @@ const Task = {
     },
 
     evenDragStartTask(event) {
-        console.log(this.innerHTML)
         event.stopPropagation()
         this.classList.add("dragElement")
-        console.log(this.outerHTML)
         Task.darggbleTask = this
     },
 
@@ -127,8 +126,14 @@ const Task = {
     evenDragDropTask(event) {
         event.preventDefault()
         event.stopPropagation()
+        // console.log(Task.darggbleTask.innerHTML)
+        // console.log(this.innerHTML)
         if (Task.darggbleTask !== this) {
+            // console.log('yes')
+            // console.log(Task.darggbleTask.parentElement.innerHTML)
+            // console.log(this.parentElement.innerHTML)
             if (this.parentElement === Task.darggbleTask.parentElement) {
+                console.log('yes')
                 const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
                 const x = parentElements.indexOf(this)
                 const y = parentElements.indexOf(Task.darggbleTask)
@@ -138,6 +143,7 @@ const Task = {
                     this.parentElement.insertBefore(Task.darggbleTask, this.nextElementSibling)
                 }
             } else {
+                // console.log('no')
                 this.parentElement.insertBefore(Task.darggbleTask, this)
             }
         }

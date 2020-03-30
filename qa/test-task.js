@@ -70,25 +70,44 @@ let domForDrag = new JSDOM(`<!DOCTYPE html><div class="some"><div class="task" d
 let chooseTask = domForDrag.window.document.querySelector('.task')
 task.Task.addDragnDropEvent(chooseTask)
 chooseTask.getAttribute('draggable')
-
 ///////////
 //evenDragStartTask
-let dragstart = new MouseEvent('dragstart', {
+let dragStart = new MouseEvent('dragstart', {
     'view': window,
     'bubbles': true,
     'cancelable': true
 });
-chooseTask.dispatchEvent(dragstart)
+chooseTask.dispatchEvent(dragStart)
 
 let checkStart = Boolean(domForDrag.window.document.querySelector('.dragElement'))
-let darggbleTask = task.Task.darggbleTask
-console.log(darggbleTask.parentElement)
 ///////////
-//dragstart
+//evenDragEndTask
+let dragEnd = new MouseEvent('dragend', {
+    'view': window,
+    'bubbles': true,
+    'cancelable': true
+});
+chooseTask.dispatchEvent(dragEnd)
+
+let checkEnd = Boolean(!domForDrag.window.document.querySelector('.dragElement'))
 
 suite('Testing module task', function () {
-    test('addDragnDropEvent создает атрибут draggable и вешает event-ы', function () {
-        assert(chooseTask.getAttribute('draggable') )
+    test('Обработчики событий работают, классы создаются/удаляются', function () {
+        assert(checkStart && checkEnd)
     })
 })
 
+////////////////////////////////////////////////
+//evenDragDropTask
+// let drop = new MouseEvent('drop', {
+//     'view': window,
+//     'bubbles': true,
+//     'cancelable': true
+// });
+// chooseTask.dispatchEvent(dragStart)
+
+// let domForDrop = new JSDOM(`<!DOCTYPE html><div class="some"><div class="task dragElement" data-task-id="6"><div tabindex="1" class="task-text edit">english speaking</div><div></div></div></div>`)
+// let nextTask = domForDrop.window.document.querySelector('.task')
+// task.Task.addDragnDropEvent(nextTask)
+// chooseTask.dispatchEvent(dragStart)
+// nextTask.dispatchEvent(drop)

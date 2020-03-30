@@ -97,6 +97,7 @@ const Column = {
         if (id) {
             body.id = id
         }
+        console.log('body', body)
         // Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
         axios.post('/fixTitleColumn', body)
             .then(function (response) {
