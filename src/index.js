@@ -56,7 +56,6 @@ promise.then(function (result) {
         if (result.status.code != 0) {
             console.log("Ошибка")
         }
-
         let content = result.content
         if (content.length > 0) {
             const listColumns = document.querySelector('.list-column')
@@ -70,7 +69,6 @@ promise.then(function (result) {
                 listColumns.append(columnNew)
             })
         }
-
     })
 
 window.onload = () => {
