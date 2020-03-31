@@ -91,7 +91,6 @@ const Column = {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
-            
         }
         const id = element.parentElement.getAttribute('data-task-id')
         if (id) {
@@ -101,7 +100,7 @@ const Column = {
         // Send.sendToBack("http://localhost:8000/fixTitleColumn", body, "POST")
         axios.post('/fixTitleColumn', body)
             .then(function (response) {
-                // console.log('element fixed',response)
+                console.log('element fixed',response)
             })
             .catch(function (error) {
                 // handle error

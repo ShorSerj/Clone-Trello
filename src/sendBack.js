@@ -5,14 +5,13 @@ const Send = {
             xhr.open(method, url)
             xhr.responseType = 'json'
             xhr.setRequestHeader('Content-Type', 'application/json')
-
             xhr.send(JSON.stringify(body))
             // 4. Этот код сработает после того, как мы получим ответ сервера
             xhr.onload = function () {
                 if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
                     // alert(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
                 } else { // если всё прошло гладко, выводим результат
-                    // console.log(xhr.response)
+                    console.log(xhr.response)
                     resolve(xhr.response)
                 }
             }
@@ -30,7 +29,14 @@ const Send = {
                 // alert("Запрос не удался");
             };
         })
+        promise.catch(function(e) {
+            // Функция не перевыбросила исключение 'e'
+            // в результате произойдёт resolve(undefined)
+            // для Promise, возвращённого функцией catch
+            console.log(e); // "oh, no!"
+        })
         return promise.then()
+        
     }
 }
 export {
