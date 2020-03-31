@@ -59,6 +59,7 @@ const Column = {
     addColumn(element) {
         let ColumnNew = element.querySelector('.edit')
         ColumnNew.setAttribute('contenteditable', true)
+        console.log(ColumnNew.parentElement)
         ColumnNew.focus()
 
         ColumnNew.addEventListener("blur", () => {

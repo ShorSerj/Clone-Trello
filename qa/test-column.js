@@ -9,7 +9,7 @@ const {
     JSDOM
 } = jsdom;
 
-const newColumn = `<div class="column" data-column-id="193" draggable="true"><div class="column-header"><div class="title edit">Done</div><span class="list-actions"><span>...</span></span></div><div class="list-tasks"></div><button class="add-task">Добавить задачу</button></div>`
+
 
 const dom = new JSDOM(`<!DOCTYPE html><div class="column" data-column-id="12" draggable="true">
 <div class="column-header"><div class="title edit">hard skills</div><span class="list-actions">
@@ -59,6 +59,9 @@ suite('Testing module column', function () {
     })
 })
 
+////////////////////////////////////////////////
+//Create
+const newColumn = `<div class="column" data-column-id="193" draggable="true"><div class="column-header"><div class="title edit" tabindex="0"></div><span class="list-actions"><span>...</span></span></div><div class="list-tasks"></div><button class="add-task">Добавить задачу</button></div>`
 let some = column.Column.create(193)
 
 suite('Testing module column', function () {
@@ -66,6 +69,22 @@ suite('Testing module column', function () {
         assert(some.outerHTML === newColumn)
     })
 })
+
+////////////////////////////////////////////////
+//addСolumn
+const domForAdd = new JSDOM(`<!DOCTYPE html><div class="list-column"></div>`)
+let ColumnOnFocus = `<div class="title edit" tabindex="0" contenteditable="true"></div>`
+let parent = domForAdd.window.document.querySelector('.list-column')
+const createColumn = column.Column.create(192)
+parent.append(createColumn)
+let addColumn = column.Column.addColumn(createColumn)
+
+suite('Testing module task', function () {
+    test('addСolumn давляет создаваему элемену аттрибут contenteditable, вешает фокус и обработчик событий', function () {
+        assert(addColumn.getAttribute('contenteditable') && domForAdd.window.document.activeElement.outerHTML === ColumnOnFocus)
+    })
+})
+
 
 // EditValue
 let edit = domForEdit.window.document.querySelector('.edit')
@@ -109,7 +128,7 @@ const output = `
 <div class="task-text edit" contenteditable="true">english writing</div>
 <div></div></div><div class="task" data-task-id="6" draggable="true">
 <div class="task-text edit" contenteditable="true">english speaking</div>
-<div></div></div><div class="task" data-task-id="2" draggable="true"><div class="task-text edit" contenteditable="true"></div><div></div></div></div><button class="add-task">Добавить задачу</button>`
+<div></div></div><div class="task" data-task-id="2" draggable="true"><div tabindex="0" class="task-text edit" contenteditable="true"></div><div></div></div></div><button class="add-task">Добавить задачу</button>`
 
 let columnElement = domColumn.window.document.querySelector('.column')
 column.Column.eventAddTask(columnElement)
