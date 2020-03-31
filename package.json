@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
     "expressServer": "cross-env PORT=3001 nodemon serverExpress.js",
     "startServer": "cross-env PORT=3001 nodemon startServer.js",
-    "test-unit": "mocha -r jsdom-global/register --require @babel/register -u tdd -R spec qa/test-sendBack.js"
+    "test-unit": "mocha -r jsdom-global/register --require @babel/register -u tdd -R spec qa/test-task.js"
   },
   "browserslist": "> 0.25%, not dead",
   "author": "",

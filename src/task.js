@@ -15,22 +15,9 @@ const Task = {
         taskElement.setAttribute('data-task-id', idCounter)
         taskElement.setAttribute('draggable', 'true')
         const taskEdit = document.createElement("div")
-        taskEdit.setAttribute('tabindex', 1)
+        taskEdit.setAttribute('tabindex', 0)
         taskEdit.classList.add("task-text", "edit")
         taskEdit.innerHTML = content
-
-        taskEdit.setAttribute('contenteditable', true)
-        // TODO: доработать функционал фокуса
-        taskEdit.focus()
-
-        taskEdit.addEventListener("blur", () => {
-            if (taskEdit.innerHTML.length < 1 && taskEdit.closest(".task")) {
-                taskEdit.closest(".task").remove()
-            }
-
-            taskEdit.removeAttribute('contenteditable')
-
-        })
 
         const taskDeadLine = document.createElement("div")
         taskElement.append(taskEdit)
@@ -41,6 +28,20 @@ const Task = {
         Task.addDragnDropEvent(taskElement)
         Task.editValue(taskEdit)
         return taskElement
+    },
+
+    addTask(element) {
+        let taskNew = element.querySelector('.edit')
+        taskNew.setAttribute('contenteditable', true)
+        taskNew.focus()
+
+        taskNew.addEventListener("blur", () => {
+            if (taskNew.innerHTML.length < 1 && taskNew.closest(".task")) {
+                taskNew.closest(".task").remove()
+            }
+            taskNew.removeAttribute('contenteditable')
+        })
+        return taskNew
     },
 
     findIdTask(idTasks) {
@@ -58,7 +59,6 @@ const Task = {
     editValue(element) {
         let firstTextTask
         element.addEventListener('dblclick', () => {
-            // console.log(element)
             element.setAttribute('contenteditable', true)
             element.focus()
             firstTextTask = element.innerHTML
@@ -85,7 +85,9 @@ const Task = {
         if (id) {
             body.id = id
         }
-        Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
+        if(body.text && body.idParent){
+            Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
+        }
     },
 
     addDragnDropEvent(chooseTask) {

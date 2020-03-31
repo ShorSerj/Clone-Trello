@@ -10,7 +10,7 @@ const Column = {
     idCounter: 4,
     darggbleColumn: null,
 
-    create(id = null, title = "Done") {
+    create(id = null, title = "") {
         let idCounter = id
         if (!id) {
             idCounter = Column.idCounter
@@ -25,6 +25,7 @@ const Column = {
 
         const columnTitle = document.createElement("div")
         columnTitle.classList.add("title", "edit")
+        columnTitle.setAttribute('tabindex', 0)
         columnTitle.innerHTML = title
 
         const actionList = document.createElement("span")
@@ -51,10 +52,22 @@ const Column = {
         if (!id) {
             Column.idCounter++
         }
-
-        
         return columnNewElement
 
+    },
+
+    addColumn(element) {
+        let ColumnNew = element.querySelector('.edit')
+        ColumnNew.setAttribute('contenteditable', true)
+        ColumnNew.focus()
+
+        ColumnNew.addEventListener("blur", () => {
+            if (ColumnNew.innerHTML.length < 1 && ColumnNew.closest(".task")) {
+                ColumnNew.closest(".task").remove()
+            }
+            ColumnNew.removeAttribute('contenteditable')
+        })
+        return ColumnNew
     },
 
     findIdColumn(idTasks) {
@@ -77,8 +90,8 @@ const Column = {
             firstText = element.innerHTML
         })
         element.addEventListener("blur", () => {
-            if (element.innerHTML.length < 1 && element.closest(".task")) {
-                element.closest(".task").remove()
+            if (element.innerHTML.length < 1 && element.closest(".column")) {
+                element.closest(".column").remove()
             }
             element.removeAttribute('contenteditable')
             if (firstText !== element.innerHTML) {
@@ -117,7 +130,9 @@ const Column = {
         buttonAddTask.addEventListener('click', function () {
             let idTasks = document.querySelectorAll('.task')
             let id = Task.findIdTask(idTasks)
-            columnElement.querySelector('.list-tasks').append(Task.create(id))
+            let taskNew = Task.create(id)
+            columnElement.querySelector('.list-tasks').append(taskNew)
+            Task.addTask(taskNew)
         })
         Column.addDragnDropEventColums(columnElement)
     },

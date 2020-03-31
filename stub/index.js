@@ -99,6 +99,10 @@ app.use('/fixTitleColumn', (req, res) => {
     res.send("Data fixed")
 });
 
+app.use('/fixTitleTask', (req, res) => {
+    res.send("Data fixed")
+});
+
 
 app.listen(app.get('port'), () => {
     console.log(`Сервер запущен, ${app.get('port')}`)

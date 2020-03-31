@@ -33,11 +33,26 @@ suite('Testing module task', function () {
 
 ////////////////////////////////////////////////
 //Create
-let taskCompare = `<div class="task" data-task-id="8" draggable="true"><div tabindex="1" class="task-text edit" contenteditable="true"></div><div></div></div>`
+let taskCompare = `<div class="task" data-task-id="8" draggable="true"><div tabindex="0" class="task-text edit"></div><div></div></div>`
 
 suite('Testing module task', function () {
     test('Create создает task', function () {
         assert(task.Task.create(id).outerHTML === taskCompare)
+    })
+})
+
+////////////////////////////////////////////////
+//addTask
+const domForAdd = new JSDOM(`<!DOCTYPE html><div class="task" data-task-id="8" draggable="true"></div>`)
+let TaskOnFocus = `<div tabindex="0" class="task-text edit" contenteditable="true"></div>`
+let parent = domForAdd.window.document.querySelector('.task')
+const createTask = task.Task.create(id)
+parent.append(createTask)
+let newTask = task.Task.addTask(createTask)
+
+suite('Testing module task', function () {
+    test('addTask давляет создаваему элемену аттрибут contenteditable, вешает фокус и обработчик событий', function () {
+        assert(newTask.getAttribute('contenteditable') && domForAdd.window.document.activeElement.outerHTML === TaskOnFocus)
     })
 })
 
@@ -56,7 +71,7 @@ let event = new MouseEvent('dblclick', {
 taskEdit.dispatchEvent(event)
 
 suite('Testing module task', function () {
-    test('Create создает task', function () {
+    test('editValue по двойному клику добавляет аттрибут contenteditable', function () {
         assert(taskEdit.getAttribute("contenteditable") )
     })
 })
