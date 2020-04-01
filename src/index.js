@@ -23,7 +23,7 @@ import {
 //         // console.log('response/axios', response)
 //         // handle success
 //         if (response.data.status.code != 0) {
-//             console.log("Ошибка")
+//             ("Ошибка")
 //         }
 
 //         let content = response.data.content
@@ -53,23 +53,23 @@ let promise = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/tasks', "", "GET"))
 })
 promise.then(function (result) {
-        if (result.status.code != 0) {
-            console.log("Ошибка")
-        }
-        let content = result.content
-        if (content.length > 0) {
-            const listColumns = document.querySelector('.list-column')
-            content.forEach((element) => {
-                const columnNew = Column.create(element.id, element.name)
-                const list = columnNew.querySelector(".list-tasks")
-                element.tasks.forEach((task) => {
-                    const taskNew = Task.create(task.id, task.text)
-                    list.append(taskNew)
-                })
-                listColumns.append(columnNew)
+    if (result.status.code != 0) {
+        console.log("Ошибка")
+    }
+    let content = result.content
+    if (content.length > 0) {
+        const listColumns = document.querySelector('.list-column')
+        content.forEach((element) => {
+            const columnNew = Column.create(element.id, element.name)
+            const list = columnNew.querySelector(".list-tasks")
+            element.tasks.forEach((task) => {
+                const taskNew = Task.create(task.id, task.text)
+                list.append(taskNew)
             })
-        }
-    })
+            listColumns.append(columnNew)
+        })
+    }
+})
 
 window.onload = () => {
     const listBack = ["url(../img/back_1.jpg)", "url(../img/back_2.jpg)", "url(../img/back_3.jpg)", "url(../img/back_4.jpg)"]

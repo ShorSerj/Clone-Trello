@@ -27,12 +27,6 @@ app.use(express.static('./dist'))
 app.set('port', process.env.PORT || 3000)
 
 app.get('/tasks', function (req, res) {
-    console.log('i get!')
-    // Tasks.find({}, function (err, docs) {
-    //     if (err) return console.log(err);
-    //     console.log(docs);
-    //     res.send(docs)
-    // })
     res.send(require('./task.json'))
 })
 
@@ -44,29 +38,8 @@ app.get('/test', function (req, res) {
     })
 })
 
-app.get('/testdel', function (req, res) {
-    Tasks.remove({
-        idParent: 200
-    }, function (err, result) {
-        if (err) return console.log(err)
-        console.log(result)
-    })
-    Tasks.find({}, function (err, docs) {
-        if (err) return console.log(err);
-        console.log(docs);
-        res.send(docs)
-    })
-})
-
 app.use('/fixTitleColumn', (req, res) => {
     let id = req.body
-    console.log('______________________________________', id)
-    // for (let key in id) {
-    //     console.log(key + ": " + id[key]);
-    //     fs.appendFile('createHistory.txt', key + ": " + id[key] + "   ", function (error) {
-    //         if (error) throw error;
-    //     });
-    // }
 
     const task = new Tasks({
         id: null,
@@ -79,15 +52,15 @@ app.use('/fixTitleColumn', (req, res) => {
         value: id.text
     }, function (err, result) {
         if (err) return console.log(err)
-        console.log(result)
+        console.log('updated', result)
     })
-    Tasks.find({
-        idParent: 13
-    }, function (err, docs) {
-        if (err) return console.log(err);
-        console.log(docs);
-        res.send(docs)
-    })
+    // Tasks.find({
+    //     idParent: 13
+    // }, function (err, docs) {
+    //     if (err) return console.log(err);
+    //     (docs);
+    //     res.send(docs)
+    // })
     task.save()
         .then(function (doc) {
             console.log("Сохранен объект", doc)
@@ -103,7 +76,24 @@ app.use('/fixTitleTask', (req, res) => {
     res.send("Data fixed")
 });
 
-
+app.use('/deleteElement', (req, res) => {
+    Tasks.remove({
+        id: req.body.id,
+        idParent: req.body.idParent,
+        value: req.body.value
+    }, function (err, result) {
+        if (err) return console.log(err)
+        console.log(result)
+    })
+});
+// app.get('/testdel', function (req, res) {
+//     Tasks.remove({}, function (err, result)
+//     Tasks.find({}, function (err, docs) {
+//         if (err) return console.log(err);
+//         console.log(docs);
+//         res.send(docs)
+//     })
+// })
 app.listen(app.get('port'), () => {
     console.log(`Сервер запущен, ${app.get('port')}`)
 })

@@ -28,12 +28,6 @@ const Send = {
                 // alert("Запрос не удался");
             };
         })
-        promise.catch(function(e) {
-            // Функция не перевыбросила исключение 'e'
-            // в результате произойдёт resolve(undefined)
-            // для Promise, возвращённого функцией catch
-            console.log(e); // "oh, no!"
-        })
         return promise.then()
         
     }
