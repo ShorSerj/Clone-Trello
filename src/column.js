@@ -86,12 +86,12 @@ const Column = {
         return id
     },
 
-//TODO пересмотреть логику contextMenu и разбить по модулям
+    //TODO пересмотреть логику contextMenu и разбить по модулям
     contextMenu(actionList) {
         actionList.addEventListener('click', (element) => {
             let contextMenu = document.querySelector('.columnMenu')
             let editColumnMenu = document.querySelector('.editColumn')
-            let deleteColumnMenu = document.querySelector('.deleteColumn')   
+            let deleteColumnMenu = document.querySelector('.deleteColumn')
 
             contextMenu.style.display = 'inline'
             let left = element.x;
@@ -114,7 +114,7 @@ const Column = {
                 editColumn.dispatchEvent(event)
             })
 
-            deleteColumnMenu.addEventListener('click', () => { 
+            deleteColumnMenu.addEventListener('click', () => {
                 let editColumn = actionList.closest('.column')
                 Column.deleteElement(editColumn)
                 editColumn.remove()
@@ -127,6 +127,7 @@ const Column = {
         let firstText
         element.addEventListener('dblclick', () => {
             element.setAttribute('contenteditable', true)
+
             //TODO мигующий курсор появляется только поле даблклика и еще одного клика
             element.focus()
             firstText = element.innerHTML
@@ -140,7 +141,7 @@ const Column = {
                 Column.saveColumn(element)
             }
         })
-    }, 
+    },
 
     saveColumn(element) {
         const body = {
@@ -165,31 +166,6 @@ const Column = {
             });
     },
 
-    deleteElement(element) {
-        console.log(element)
-        const body = {
-            idParent: element.closest('.column').getAttribute('data-column-id'),
-            value: element.querySelector('.title ').innerHTML
-        }
-        const id = element.parentElement.getAttribute('data-task-id')
-        if (id) {
-            body.id = id
-        }else{
-            body.id = null
-        }
-        console.log('body', body)
-        axios.post('/deleteElement', body)
-            .then(function (response) {
-                console.log('element deleted', response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
-    },
-
     eventAddTask(columnElement) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
@@ -200,6 +176,41 @@ const Column = {
             Task.addTask(taskNew)
         })
         Column.addDragnDropEventColums(columnElement)
+    },
+
+    deleteElement(element, parent = null) {
+        const body = {}
+        const idParent = element.closest('.column')
+        if (idParent) {
+            body.idParent = element.closest('.column').getAttribute('data-column-id')
+        } else {
+            body.idParent = parent.closest('.column').getAttribute('data-column-id')
+        }
+
+        const value = element.querySelector('.title')
+        if (value) {
+            body.value = element.querySelector('.title').innerHTML
+        } else {
+            body.value = element.querySelector('.edit').innerHTML
+        }
+
+        const id = element.getAttribute('data-task-id')
+        if (id) {
+            body.id = id
+        } else {
+            body.id = null
+        }
+
+        axios.post('/deleteElement', body)
+            .then(function (response) {
+                console.log('element deleted', response)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     },
 
     addDragnDropEventColums(columnElement) {

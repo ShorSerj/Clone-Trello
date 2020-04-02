@@ -1,6 +1,11 @@
 import {
     Send
 } from "./sendBack"
+import {
+    Column
+} from "./column"
+const axios = require('axios').default
+
 const Task = {
     idCounter: 10,
     darggbleTask: null,
@@ -26,7 +31,10 @@ const Task = {
             Task.idCounter++
         }
         Task.addDragnDropEvent(taskElement)
-        Task.editValue(taskEdit)
+        
+
+        Task.contextMenu(taskElement)
+
         return taskElement
     },
 
@@ -56,26 +64,71 @@ const Task = {
         return id
     },
 
+    contextMenu(taskElement) {
+        let contextMenu = document.querySelector('.TaskMenu')
+        let editTaskMenu = document.querySelector('.editTask')
+        let deleteTaskMenu = document.querySelector('.deleteTask')
+
+        taskElement.oncontextmenu = function () {
+            return false
+        };
+
+        taskElement.addEventListener('contextmenu', (element) => {
+            let cords = taskElement.getBoundingClientRect()
+            contextMenu.style.display = 'inline-block'
+
+            contextMenu.style.left = cords.left + element.toElement.offsetParent.offsetWidth + 5 + "px";
+            contextMenu.style.top = cords.top + "px";
+
+            editTaskMenu.addEventListener('click', () => {
+                Task.editValue(taskElement)
+                console.log('task edit begitn')
+                let editTask = taskElement.querySelector('.edit')
+                let event = new MouseEvent('dblclick', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true
+                });
+                editTask.dispatchEvent(event)
+            })
+
+            deleteTaskMenu.addEventListener('click', () => {
+                let parent = taskElement.closest('.column')
+                let editTask = taskElement.closest('.task')
+
+                editTask.remove()
+                Column.deleteElement(editTask, parent)
+            })
+
+            contextMenu.addEventListener('blur', () => {
+                contextMenu.style.display = 'none';
+            })
+        })
+
+    },
+
     editValue(element) {
         let firstTextTask
         element.addEventListener('dblclick', () => {
             element.setAttribute('contenteditable', true)
             element.focus()
             firstTextTask = element.innerHTML
+            element.addEventListener("blur", () => {
+                if (element.innerHTML.length < 1 && element.closest(".task")) {
+                    element.closest(".task").remove()
+                }
+    
+                element.removeAttribute('contenteditable')
+                if (firstTextTask !== element.innerHTML) {
+                    Task.saveTask(element)
+                }
+            })
         })
-        element.addEventListener("blur", () => {
-            if (element.innerHTML.length < 1 && element.closest(".task")) {
-                element.closest(".task").remove()
-            }
 
-            element.removeAttribute('contenteditable')
-            if (firstTextTask !== element.innerHTML) {
-                Task.saveTask(element)
-            }
-        })
     },
 
     saveTask(element) {
+
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
@@ -85,8 +138,18 @@ const Task = {
         if (id) {
             body.id = id
         }
-        if(body.text && body.idParent){
-            Send.sendToBack("http://localhost:8000/fixTitleTask", body, "POST")
+        if (body.text && body.idParent) {
+            axios.post('/fixTitleColumn', body)
+                .then(function (response) {
+                    console.log('element fixed', response)
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
         }
     },
 

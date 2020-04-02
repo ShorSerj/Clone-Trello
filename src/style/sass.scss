@@ -224,18 +224,19 @@ main {
                         text-rendering: auto;
                         -webkit-font-smoothing: antialiased;
 
-                        &:hover{
+                        &:hover {
                             background-color: #dfdfdf;
                             cursor: pointer;
                         }
                     }
-                    
+
                 }
 
                 .list-tasks {
                     color: #172b4d;
 
                     .task {
+                        position: relative;
                         background-color: white;
                         padding: 6px 8px 2px 8px;
                         margin-bottom: 8px;
@@ -341,5 +342,31 @@ main {
             }
         }
 
+    }
+}
+
+
+.TaskMenu {
+    display: none;
+    position: absolute;
+    padding-top: 2px;
+
+    .contextTaskMenu__items {
+        display: flex;
+        flex-flow: column;
+        padding-bottom: 15px;
+
+        .contextTaskMenu__item {
+            padding-top: 5px;
+            color: white;
+            height: 26px;
+            margin-bottom: 5px;
+
+            .contextTaskMenu__link {
+                border-radius: 3px;
+                background-color: #292929;
+                padding: 5px 10px 5px 11px;
+            }
+        }
     }
 }

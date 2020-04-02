@@ -39,28 +39,23 @@ app.get('/test', function (req, res) {
 })
 
 app.use('/fixTitleColumn', (req, res) => {
-    let id = req.body
+    console.log('req', req.body)
+    let body = req.body
 
     const task = new Tasks({
-        id: null,
-        idParent: id.idParent,
-        value: id.text
+        id: body.id,
+        idParent: body.idParent,
+        value: body.text
     });
+
     task.updateOne({
-        idParent: id.idParent
+        idParent: body.idParent
     }, {
-        value: id.text
+        value: body.text
     }, function (err, result) {
         if (err) return console.log(err)
         console.log('updated', result)
     })
-    // Tasks.find({
-    //     idParent: 13
-    // }, function (err, docs) {
-    //     if (err) return console.log(err);
-    //     (docs);
-    //     res.send(docs)
-    // })
     task.save()
         .then(function (doc) {
             console.log("Сохранен объект", doc)
@@ -69,14 +64,17 @@ app.use('/fixTitleColumn', (req, res) => {
             console.log(err)
             mongoose.disconnect()
         })
+        console.log('all good')
     res.send("Data fixed")
 });
 
 app.use('/fixTitleTask', (req, res) => {
+    
     res.send("Data fixed")
 });
 
 app.use('/deleteElement', (req, res) => {
+    console.log(req.body)
     Tasks.remove({
         id: req.body.id,
         idParent: req.body.idParent,
