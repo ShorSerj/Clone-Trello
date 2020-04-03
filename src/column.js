@@ -4,6 +4,9 @@ import {
 import {
     Send
 } from "./sendBack"
+import {
+    ContextMenu
+} from "./contextTaskMenu"
 const axios = require('axios').default;
 
 const Column = {
@@ -33,7 +36,11 @@ const Column = {
         actionList.classList.add("fas")
         actionList.classList.add("fa-ellipsis-h")
 
-        Column.contextMenu(actionList)
+        actionList.addEventListener('click', (event)=>{
+            event.toElement.offsetParent.querySelector('.title').classList.add('fixingColumn')
+            ContextMenu.menuColumn(event.toElement.offsetParent)
+        })
+        
 
         const listTask = document.createElement("div")
         listTask.classList.add("list-tasks")
@@ -84,43 +91,6 @@ const Column = {
         })
         id++
         return id
-    },
-
-    //TODO пересмотреть логику contextMenu и разбить по модулям
-    contextMenu(actionList) {
-        actionList.addEventListener('click', (element) => {
-            let contextMenu = document.querySelector('.columnMenu')
-            let editColumnMenu = document.querySelector('.editColumn')
-            let deleteColumnMenu = document.querySelector('.deleteColumn')
-
-            contextMenu.style.display = 'inline'
-            let left = element.x;
-            let top = element.y;
-            contextMenu.style.left = left + "px";
-            contextMenu.style.top = top + "px";
-            contextMenu.focus()
-
-            contextMenu.addEventListener("blur", () => {
-                contextMenu.style.display = 'none'
-            })
-
-            editColumnMenu.addEventListener('click', () => {
-                let editColumn = actionList.parentElement.querySelector('.edit')
-                let event = new MouseEvent('dblclick', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true
-                });
-                editColumn.dispatchEvent(event)
-            })
-
-            deleteColumnMenu.addEventListener('click', () => {
-                let editColumn = actionList.closest('.column')
-                Column.deleteElement(editColumn)
-                editColumn.remove()
-                contextMenu.blur()
-            })
-        })
     },
 
     editValue(element) {

@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 //Установка схемы
 const tasksScheme = new Schema({
     id: Number,
-    idParent: Number,
+    idParent: Number, 
     value: String
 });
 
@@ -84,14 +84,7 @@ app.use('/deleteElement', (req, res) => {
         console.log(result)
     })
 });
-// app.get('/testdel', function (req, res) {
-//     Tasks.remove({}, function (err, result)
-//     Tasks.find({}, function (err, docs) {
-//         if (err) return console.log(err);
-//         console.log(docs);
-//         res.send(docs)
-//     })
-// })
+
 app.listen(app.get('port'), () => {
     console.log(`Сервер запущен, ${app.get('port')}`)
 })

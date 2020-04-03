@@ -85,3 +85,4 @@ buttonColumn.addEventListener('click', function () {
     document.querySelector('.list-column').append(newColumn)
     Column.addColumn(newColumn)
 })
+
