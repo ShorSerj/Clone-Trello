@@ -4,9 +4,7 @@ import {
 import {
     Send
 } from "./sendBack"
-import {
-    ContextMenu
-} from "./contextTaskMenu"
+
 const axios = require('axios').default;
 
 const Column = {
@@ -36,11 +34,7 @@ const Column = {
         actionList.classList.add("fas")
         actionList.classList.add("fa-ellipsis-h")
 
-        actionList.addEventListener('click', (event)=>{
-            event.toElement.offsetParent.querySelector('.title').classList.add('fixingColumn')
-            ContextMenu.menuColumn(event.toElement.offsetParent)
-        })
-        
+        Column.contextMenu(columnNewElement, columnTitle, actionList)
 
         const listTask = document.createElement("div")
         listTask.classList.add("list-tasks")
@@ -57,27 +51,128 @@ const Column = {
         columnNewElement.append(addTask)
 
         Column.eventAddTask(columnNewElement)
-        Column.editValue(columnTitle)
+        Column.addDragnDropEventColums(columnNewElement)
 
         if (!id) {
             Column.idCounter++
         }
         return columnNewElement
+    },
 
+    contextMenu(columnNewElement, columnTitle, actionList) {
+        const columnContextMenu = document.createElement('nav')
+        columnContextMenu.classList.add('columnMenu')
+        columnContextMenu.setAttribute('tabindex', 0)
+
+        const titleContextMenu = document.createElement('span')
+        titleContextMenu.classList.add('titleMenu')
+        titleContextMenu.innerHTML = 'List Actions'
+        columnContextMenu.append(titleContextMenu)
+
+        const contextContainer = document.createElement('ul')
+        contextContainer.classList.add('contextMenu__items')
+
+        //Button Edit
+        const contextEdit = document.createElement('li')
+        contextEdit.classList.add('contextMenu__item')
+
+        const contextEditButton = document.createElement('span')
+        contextEditButton.classList.add('contexMenu__link')
+        contextEditButton.innerHTML = 'Edit Column'
+
+        const contextEditButtonImg = document.createElement('i')
+        contextEditButtonImg.classList.add('fa')
+        contextEditButtonImg.classList.add('fa-edit')
+
+        contextEditButton.prepend(contextEditButtonImg)
+        contextEdit.append(contextEditButton)
+        contextContainer.append(contextEdit)
+        columnContextMenu.append(contextContainer)
+
+        contextEditButton.addEventListener('click', () => {
+            columnTitle.setAttribute('contenteditable', true)
+            columnTitle.focus()
+            let firstText = columnTitle.innerHTML
+
+            const eventBlur = function () {
+                if (columnTitle.innerHTML.length < 1) {
+                    columnNewElement.remove()
+                }
+                columnTitle.removeAttribute('contenteditable')
+                if (columnTitle.innerHTML !== firstText) {
+                    Column.saveColumn(columnTitle)
+                    columnTitle.removeEventListener("blur", eventBlur)
+                }
+            }
+            columnTitle.addEventListener("blur", eventBlur)
+        })
+        // \Button Edit
+
+        // Button Delete
+        const contextDel = document.createElement('li')
+        contextDel.classList.add('contextMenu__item')
+
+        const contextDelButton = document.createElement('span')
+        contextDelButton.classList.add('contexMenu__link')
+        contextDelButton.innerHTML = 'Delete Column'
+
+        const contextDelButtonImg = document.createElement('i')
+        contextDelButtonImg.classList.add('fa')
+        contextDelButtonImg.classList.add('fa-times')
+
+        contextDelButton.prepend(contextDelButtonImg)
+        contextDel.append(contextDelButton)
+        contextContainer.append(contextDel)
+
+        contextDelButton.addEventListener('click', () => {
+            columnNewElement.remove()
+            Column.deleteElement(columnNewElement)
+        })
+        // \Button Delete
+
+        actionList.addEventListener('click', (event) => {
+            columnContextMenu.style.display = 'inline'
+            columnContextMenu.focus()
+
+            columnContextMenu.addEventListener("blur", () => {
+                columnContextMenu.style.display = 'none'
+            })
+        })
+        columnNewElement.append(columnContextMenu)
     },
 
     addColumn(element) {
         let columnNew = element.querySelector('.edit')
         columnNew.setAttribute('contenteditable', true)
-
         columnNew.focus()
 
-        columnNew.addEventListener("blur", () => {
-            if (columnNew.innerHTML.length < 1 && columnNew.closest(".task")) {
-                columnNew.closest(".task").remove()
+        let eventBlur = function () {
+            if (columnNew.innerHTML.length < 1) {
+                element.remove()
+            } else {
+                columnNew.removeAttribute('contenteditable')
+
+                const body = {
+                    idParent: element.getAttribute('data-column-id'),
+                    text: element.querySelector('.title').innerHTML
+                }
+
+                axios.post('/createColumn', body)
+                    .then(function (response) {
+                        console.log('element fixed', response)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+
+                columnNew.removeEventListener("blur", eventBlur)
             }
-            columnNew.removeAttribute('contenteditable')
-        })
+        }
+        columnNew.addEventListener("blur", eventBlur)
         return columnNew
     },
 
@@ -93,37 +188,12 @@ const Column = {
         return id
     },
 
-    editValue(element) {
-        let firstText
-        element.addEventListener('dblclick', () => {
-            element.setAttribute('contenteditable', true)
-
-            //TODO мигующий курсор появляется только поле даблклика и еще одного клика
-            element.focus()
-            firstText = element.innerHTML
-        })
-        element.addEventListener("blur", () => {
-            if (element.innerHTML.length < 1 && element.closest(".column")) {
-                element.closest(".column").remove()
-            }
-            element.removeAttribute('contenteditable')
-            if (firstText !== element.innerHTML && element.innerHTML) {
-                Column.saveColumn(element)
-            }
-        })
-    },
-
     saveColumn(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
         }
-        const id = element.parentElement.getAttribute('data-task-id')
-        if (id) {
-            body.id = id
-        }
-
-        axios.post('/fixTitleColumn', body)
+        axios.post('/updateColumn', body)
             .then(function (response) {
                 console.log('element fixed', response)
             })
@@ -143,27 +213,14 @@ const Column = {
             let id = Task.findIdTask(idTasks)
             let taskNew = Task.create(id)
             columnElement.querySelector('.list-tasks').append(taskNew)
-            Task.addTask(taskNew)
+            Task.addTask(taskNew, columnElement)
         })
-        Column.addDragnDropEventColums(columnElement)
     },
 
-    deleteElement(element, parent = null) {
+    deleteElement(element) {
         const body = {}
-        const idParent = element.closest('.column')
-        if (idParent) {
-            body.idParent = element.closest('.column').getAttribute('data-column-id')
-        } else {
-            body.idParent = parent.closest('.column').getAttribute('data-column-id')
-        }
 
-        const value = element.querySelector('.title')
-        if (value) {
-            body.value = element.querySelector('.title').innerHTML
-        } else {
-            body.value = element.querySelector('.edit').innerHTML
-        }
-
+        body.idParent = element.closest('.column').getAttribute('data-column-id')
         const id = element.getAttribute('data-task-id')
         if (id) {
             body.id = id
@@ -171,7 +228,7 @@ const Column = {
             body.id = null
         }
 
-        axios.post('/deleteElement', body)
+        axios.post('/deleteColumn', body)
             .then(function (response) {
                 console.log('element deleted', response)
             })

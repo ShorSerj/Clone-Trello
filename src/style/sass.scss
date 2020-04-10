@@ -315,6 +315,8 @@ main {
     width: 305px;
     border: solid 1px #dfdfdf;
     border-radius: 3px;
+    left: 285px;
+    z-index: 100;
 
     .titleMenu {
         color: #5e6c84;
@@ -350,6 +352,10 @@ main {
     display: none;
     position: absolute;
     padding-top: 2px;
+    z-index: 100;
+    left: 265px;
+    top: 0px;
+    width: 100%;
 
     .contextTaskMenu__items {
         display: flex;

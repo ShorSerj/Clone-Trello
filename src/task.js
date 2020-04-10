@@ -4,9 +4,7 @@ import {
 import {
     Column
 } from "./column"
-import {
-    ContextMenu
-} from "./contextTaskMenu"
+
 
 const axios = require('axios').default
 
@@ -27,7 +25,11 @@ const Task = {
         taskEdit.setAttribute('tabindex', 0)
         taskEdit.classList.add("task-text", "edit")
         taskEdit.innerHTML = content
- 
+
+        taskElement.oncontextmenu = function () {
+            return false
+        };
+        Task.contextMenu(taskElement, taskEdit)
 
         const taskDeadLine = document.createElement("div")
         taskElement.append(taskEdit)
@@ -36,32 +38,122 @@ const Task = {
             Task.idCounter++
         }
 
-        taskElement.oncontextmenu = function () {
-            return false
-        };
-
-        Task.editValue(taskEdit)
         Task.addDragnDropEvent(taskElement)
-            
-        taskElement.addEventListener('contextmenu', (element) => {
-            element.toElement.classList.add('fixing')
-            ContextMenu.menuTask(element.toElement.offsetParent)       
-        })
 
         return taskElement
     },
 
-    addTask(element) {
+    contextMenu(taskElement, taskEdit) {
+        const taskContextMenu = document.createElement('nav')
+        taskContextMenu.classList.add('taskMenu')
+        taskContextMenu.setAttribute('tabindex', 0)
+
+        const contextContainer = document.createElement('ul')
+        contextContainer.classList.add('contextTaskMenu__items')
+
+        //Button Edit
+        const contextEdit = document.createElement('li')
+        contextEdit.classList.add('contextTaskMenu__item')
+
+        const contextEditButton = document.createElement('span')
+        contextEditButton.classList.add('contextTaskMenu__link')
+        contextEditButton.innerHTML = 'Edit Task'
+
+        const contextEditButtonImg = document.createElement('i')
+        contextEditButtonImg.classList.add('fa')
+        contextEditButtonImg.classList.add('fa-edit')
+
+        contextEditButton.prepend(contextEditButtonImg)
+        contextEdit.append(contextEditButton)
+        contextContainer.append(contextEdit)
+        taskContextMenu.append(contextContainer)
+
+        contextEditButton.addEventListener('click', () => {
+            taskEdit.setAttribute('contenteditable', true)
+            taskEdit.focus()
+            let firstText = taskEdit.innerHTML
+
+            const eventBlur = function () {
+                if (taskEdit.innerHTML.length < 1) {
+                    taskElement.remove()
+                }
+                taskEdit.removeAttribute('contenteditable')
+                if (taskEdit.innerHTML !== firstText) {
+                    Task.saveTask(taskEdit)
+                    taskEdit.removeEventListener("blur", eventBlur)
+                }
+            }
+            taskEdit.addEventListener("blur", eventBlur)
+        })
+        // \Button Edit
+
+        // Button Delete
+        const contextDel = document.createElement('li')
+        contextDel.classList.add('contextTaskMenu__item')
+
+        const contextDelButton = document.createElement('span')
+        contextDelButton.classList.add('contextTaskMenu__link')
+        contextDelButton.innerHTML = 'Delete Task'
+
+        const contextDelButtonImg = document.createElement('i')
+        contextDelButtonImg.classList.add('fa')
+        contextDelButtonImg.classList.add('fa-times')
+
+        contextDelButton.prepend(contextDelButtonImg)
+        contextDel.append(contextDelButton)
+        contextContainer.append(contextDel)
+
+        contextDelButton.addEventListener('click', (event) => {
+            taskElement.remove()
+            let parents = event.composedPath()
+            Task.deleteTask(taskElement, parents[6])
+        })
+        // \Button Delete
+
+        taskElement.addEventListener('contextmenu', (event) => {
+            taskContextMenu.style.display = 'inline'
+            taskContextMenu.focus()
+
+            taskContextMenu.addEventListener("blur", () => {
+                taskContextMenu.style.display = 'none'
+            })
+        })
+        taskElement.append(taskContextMenu)
+    },
+
+    addTask(element, parentElement) {
         let taskNew = element.querySelector('.edit')
         taskNew.setAttribute('contenteditable', true)
         taskNew.focus()
 
-        taskNew.addEventListener("blur", () => {
+        let eventBlur = function () {
             if (taskNew.innerHTML.length < 1 && taskNew.closest(".task")) {
                 taskNew.closest(".task").remove()
+            } else {
+                taskNew.removeAttribute('contenteditable')
+                const body = {
+                    id: element.getAttribute('data-task-id'),
+                    idParent: parentElement.getAttribute('data-column-id'),
+                    text: taskNew.innerHTML
+                }
+
+                axios.post('/createTask', body)
+                    .then(function (response) {
+                        console.log('element fixed', response)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+
+                taskNew.removeEventListener("blur", eventBlur)
             }
-            taskNew.removeAttribute('contenteditable')
-        })
+        }
+
+        taskNew.addEventListener("blur", eventBlur)
         return taskNew
     },
 
@@ -77,26 +169,6 @@ const Task = {
         return id
     },
 
-    editValue(element) {
-        let firstTextTask = ""
-        element.addEventListener('dblclick', () => {
-            element.setAttribute('contenteditable', true)
-            element.focus()
-            firstTextTask = element.innerHTML
-        })
-        element.addEventListener("blur", () => {
-            if (element.innerHTML.length < 1 && element.closest(".task")) {
-                element.closest(".task").remove()
-            }
-
-            element.removeAttribute('contenteditable')
-            if (firstTextTask !== element.innerHTML && firstTextTask) {
-                Task.saveTask(element)
-                firstTextTask = ""
-            }
-        })
-    },
-
     saveTask(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
@@ -108,7 +180,7 @@ const Task = {
             body.id = id
         }
         if (body.text && body.idParent) {
-            axios.post('/fixTitleColumn', body)
+            axios.post('/updateTask', body)
                 .then(function (response) {
                     console.log('element fixed', response)
                 })
@@ -120,6 +192,23 @@ const Task = {
                     // always executed
                 });
         }
+    },
+
+    deleteTask(element, parentId) {
+        const body = {} 
+        body.idParent = parentId.getAttribute('data-column-id')
+        body.id = element.getAttribute('data-task-id')
+        
+        axios.post('/deleteTask', body)
+            .then(function (response) {
+                console.log('element deleted', response)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     },
 
     addDragnDropEvent(chooseTask) {
