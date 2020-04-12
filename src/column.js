@@ -1,9 +1,6 @@
 import {
     Task
 } from "./task"
-import {
-    Send
-} from "./sendBack"
 
 const axios = require('axios').default;
 
@@ -25,30 +22,30 @@ const Column = {
         columnHead.classList.add("column-header")
 
         const columnTitle = document.createElement("div")
-        columnTitle.classList.add("title", "edit")
+        columnTitle.classList.add("title")
         columnTitle.setAttribute('tabindex', 0)
         columnTitle.innerHTML = title
 
-        const actionList = document.createElement("i")
-        actionList.classList.add("list-actions")
-        actionList.classList.add("fas")
-        actionList.classList.add("fa-ellipsis-h")
+        const columnButtonMenu = document.createElement("i")
+        columnButtonMenu.classList.add("list-actions")
+        columnButtonMenu.classList.add("fas")
+        columnButtonMenu.classList.add("fa-ellipsis-h")
 
-        Column.contextMenu(columnNewElement, columnTitle, actionList)
+        Column.contextMenu(columnNewElement, columnTitle, columnButtonMenu)
 
-        const listTask = document.createElement("div")
-        listTask.classList.add("list-tasks")
+        const taskContainer = document.createElement("div")
+        taskContainer.classList.add("list-tasks")
 
-        const addTask = document.createElement("button")
-        addTask.classList.add("add-task")
-        addTask.innerHTML = `Добавить задачу`
+        const buttonAddTask = document.createElement("button")
+        buttonAddTask.classList.add("add-task")
+        buttonAddTask.innerHTML = `Добавить задачу`
 
         columnHead.append(columnTitle)
-        columnHead.append(actionList)
+        columnHead.append(columnButtonMenu)
 
         columnNewElement.append(columnHead)
-        columnNewElement.append(listTask)
-        columnNewElement.append(addTask)
+        columnNewElement.append(taskContainer)
+        columnNewElement.append(buttonAddTask)
 
         Column.eventAddTask(columnNewElement)
         Column.addDragnDropEventColums(columnNewElement)
@@ -59,7 +56,7 @@ const Column = {
         return columnNewElement
     },
 
-    contextMenu(columnNewElement, columnTitle, actionList) {
+    contextMenu(columnNewElement, columnTitle, columnButtonMenu) {
         const columnContextMenu = document.createElement('nav')
         columnContextMenu.classList.add('columnMenu')
         columnContextMenu.setAttribute('tabindex', 0)
@@ -92,15 +89,15 @@ const Column = {
         contextEditButton.addEventListener('click', () => {
             columnTitle.setAttribute('contenteditable', true)
             columnTitle.focus()
-            let firstText = columnTitle.innerHTML
+            let firstTitle = columnTitle.innerHTML
 
             const eventBlur = function () {
                 if (columnTitle.innerHTML.length < 1) {
                     columnNewElement.remove()
                 }
                 columnTitle.removeAttribute('contenteditable')
-                if (columnTitle.innerHTML !== firstText) {
-                    Column.saveColumn(columnTitle)
+                if (columnTitle.innerHTML !== firstTitle) {
+                    Column.updateColumn(columnTitle)
                     columnTitle.removeEventListener("blur", eventBlur)
                 }
             }
@@ -130,7 +127,7 @@ const Column = {
         })
         // \Button Delete
 
-        actionList.addEventListener('click', (event) => {
+        columnButtonMenu.addEventListener('click', (event) => {
             columnContextMenu.style.display = 'inline'
             columnContextMenu.focus()
 
@@ -142,7 +139,7 @@ const Column = {
     },
 
     addColumn(element) {
-        let columnNew = element.querySelector('.edit')
+        let columnNew = element.querySelector('.title')
         columnNew.setAttribute('contenteditable', true)
         columnNew.focus()
 
@@ -176,19 +173,19 @@ const Column = {
         return columnNew
     },
 
-    findIdColumn(idTasks) {
-        let id = 1
-        idTasks.forEach((elem) => {
-            let idThisTask = elem.getAttribute('data-column-id')
-            if (Number(idThisTask) > id) {
-                id = idThisTask
+    findIdColumn(columns) {
+        let columnNextId = 1
+        columns.forEach((elem) => {
+            let columnId = elem.getAttribute('data-column-id')
+            if (Number(columnId) > columnNextId) {
+                columnNextId = columnId
             }
         })
-        id++
-        return id
+        columnNextId++
+        return columnNextId
     },
 
-    saveColumn(element) {
+    updateColumn(element) {пше 
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
