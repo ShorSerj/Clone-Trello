@@ -131,28 +131,9 @@ const Task = {
                 taskNew.closest(".task").remove()
             } else {
                 taskNew.removeAttribute('contenteditable')
-                const body = {
-                    id: element.getAttribute('data-task-id'),
-                    idParent: parentElement.getAttribute('data-column-id'),
-                    text: taskNew.innerHTML
-                }
-
-                axios.post('/createTask', body)
-                    .then(function (response) {
-                        console.log('element fixed', response)
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-
                 taskNew.removeEventListener("blur", eventBlur)
             }
         }
-
         taskNew.addEventListener("blur", eventBlur)
         return taskNew
     },
@@ -167,48 +148,6 @@ const Task = {
         })
         id++
         return id
-    },
-
-    saveTask(element) {
-        const body = {
-            idParent: element.closest('.column').getAttribute('data-column-id'),
-            text: element.innerHTML
-        }
-        const id = element.parentElement.getAttribute('data-task-id')
-
-        if (id) {
-            body.id = id
-        }
-        if (body.text && body.idParent) {
-            axios.post('/updateTask', body)
-                .then(function (response) {
-                    console.log('element fixed', response)
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-                .then(function () {
-                    // always executed
-                });
-        }
-    },
-
-    deleteTask(element, parentId) {
-        const body = {} 
-        body.idParent = parentId.getAttribute('data-column-id')
-        body.id = element.getAttribute('data-task-id')
-        
-        axios.post('/deleteTask', body)
-            .then(function (response) {
-                console.log('element deleted', response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
     },
 
     addDragnDropEvent(chooseTask) {
@@ -249,12 +188,8 @@ const Task = {
     evenDragDropTask(event) {
         event.preventDefault()
         event.stopPropagation()
-        // console.log(Task.darggbleTask.innerHTML)
-        // console.log(this.innerHTML)
+
         if (Task.darggbleTask !== this) {
-            // console.log('yes')
-            // console.log(Task.darggbleTask.parentElement.innerHTML)
-            // console.log(this.parentElement.innerHTML)
             if (this.parentElement === Task.darggbleTask.parentElement) {
                 console.log('yes')
                 const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
@@ -266,7 +201,6 @@ const Task = {
                     this.parentElement.insertBefore(Task.darggbleTask, this.nextElementSibling)
                 }
             } else {
-                // console.log('no')
                 this.parentElement.insertBefore(Task.darggbleTask, this)
             }
         }

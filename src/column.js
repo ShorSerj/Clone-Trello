@@ -148,24 +148,6 @@ const Column = {
                 element.remove()
             } else {
                 columnNew.removeAttribute('contenteditable')
-
-                const body = {
-                    idParent: element.getAttribute('data-column-id'),
-                    text: element.querySelector('.title').innerHTML
-                }
-
-                axios.post('/createColumn', body)
-                    .then(function (response) {
-                        console.log('element fixed', response)
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-
                 columnNew.removeEventListener("blur", eventBlur)
             }
         }
@@ -185,24 +167,6 @@ const Column = {
         return columnNextId
     },
 
-    updateColumn(element) {пше 
-        const body = {
-            idParent: element.closest('.column').getAttribute('data-column-id'),
-            text: element.innerHTML
-        }
-        axios.post('/updateColumn', body)
-            .then(function (response) {
-                console.log('element fixed', response)
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
-    },
-
     eventAddTask(columnElement) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
@@ -212,29 +176,6 @@ const Column = {
             columnElement.querySelector('.list-tasks').append(taskNew)
             Task.addTask(taskNew, columnElement)
         })
-    },
-
-    deleteElement(element) {
-        const body = {}
-
-        body.idParent = element.closest('.column').getAttribute('data-column-id')
-        const id = element.getAttribute('data-task-id')
-        if (id) {
-            body.id = id
-        } else {
-            body.id = null
-        }
-
-        axios.post('/deleteColumn', body)
-            .then(function (response) {
-                console.log('element deleted', response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
     },
 
     addDragnDropEventColums(columnElement) {
