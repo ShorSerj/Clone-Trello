@@ -123,7 +123,7 @@ const Column = {
 
         contextDelButton.addEventListener('click', () => {
             columnNewElement.remove()
-            Column.deleteElement(columnNewElement)
+            Column.deleteColumn(columnNewElement)
         })
         // \Button Delete
 
@@ -185,7 +185,7 @@ const Column = {
         return columnNextId
     },
 
-    updateColumn(element) {пше 
+    updateColumn(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
@@ -214,17 +214,9 @@ const Column = {
         })
     },
 
-    deleteElement(element) {
+    deleteColumn(element) {
         const body = {}
-
         body.idParent = element.closest('.column').getAttribute('data-column-id')
-        const id = element.getAttribute('data-task-id')
-        if (id) {
-            body.id = id
-        } else {
-            body.id = null
-        }
-
         axios.post('/deleteColumn', body)
             .then(function (response) {
                 console.log('element deleted', response)

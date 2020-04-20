@@ -1,11 +1,3 @@
-import {
-    Send
-} from "./sendBack"
-import {
-    Column
-} from "./column"
-
-
 const axios = require('axios').default
 
 const Task = {
@@ -21,7 +13,7 @@ const Task = {
         taskElement.classList.add('task')
         taskElement.setAttribute('data-task-id', idCounter)
         taskElement.setAttribute('draggable', 'true')
-        const taskEdit = document.createElement("div")
+        const taskEdit = document.createElement('div')
         taskEdit.setAttribute('tabindex', 0)
         taskEdit.classList.add("task-text", "edit")
         taskEdit.innerHTML = content
@@ -83,6 +75,7 @@ const Task = {
                     taskEdit.removeEventListener("blur", eventBlur)
                 }
             }
+
             taskEdit.addEventListener("blur", eventBlur)
         })
         // \Button Edit
@@ -110,7 +103,7 @@ const Task = {
         })
         // \Button Delete
 
-        taskElement.addEventListener('contextmenu', (event) => {
+        taskElement.addEventListener('contextmenu', () => {
             taskContextMenu.style.display = 'inline'
             taskContextMenu.focus()
 
@@ -152,7 +145,6 @@ const Task = {
                 taskNew.removeEventListener("blur", eventBlur)
             }
         }
-
         taskNew.addEventListener("blur", eventBlur)
         return taskNew
     },
@@ -172,13 +164,10 @@ const Task = {
     saveTask(element) {
         const body = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
-            text: element.innerHTML
+            text: element.innerHTML,
+            id: element.parentElement.getAttribute('data-task-id')
         }
-        const id = element.parentElement.getAttribute('data-task-id')
 
-        if (id) {
-            body.id = id
-        }
         if (body.text && body.idParent) {
             axios.post('/updateTask', body)
                 .then(function (response) {
@@ -195,10 +184,10 @@ const Task = {
     },
 
     deleteTask(element, parentId) {
-        const body = {} 
+        const body = {}
         body.idParent = parentId.getAttribute('data-column-id')
         body.id = element.getAttribute('data-task-id')
-        
+
         axios.post('/deleteTask', body)
             .then(function (response) {
                 console.log('element deleted', response)
@@ -231,6 +220,27 @@ const Task = {
         event.stopPropagation()
         this.classList.remove("dragElement")
         Task.darggbleTask = null
+        let taskId = this.closest('.task').getAttribute('data-task-id')
+        let columnId = this.closest('.column').getAttribute('data-column-id')
+        let value = this.querySelector('.task-text').innerHTML
+        console.log('value', value)
+        let body = {
+            id: taskId,
+            idParent: columnId,
+            text: value
+        }
+        axios.post('/updateTask', body)
+                .then(function (response) {
+                    console.log('element fixed', response)
+                })
+                .catch(function (error) {
+                    // handle error 
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
+
     },
 
     evenDragEnterTask(event) {
@@ -256,7 +266,6 @@ const Task = {
             // console.log(Task.darggbleTask.parentElement.innerHTML)
             // console.log(this.parentElement.innerHTML)
             if (this.parentElement === Task.darggbleTask.parentElement) {
-                console.log('yes')
                 const parentElements = Array.from(this.parentElement.querySelectorAll(".task"))
                 const x = parentElements.indexOf(this)
                 const y = parentElements.indexOf(Task.darggbleTask)
@@ -266,7 +275,6 @@ const Task = {
                     this.parentElement.insertBefore(Task.darggbleTask, this.nextElementSibling)
                 }
             } else {
-                // console.log('no')
                 this.parentElement.insertBefore(Task.darggbleTask, this)
             }
         }

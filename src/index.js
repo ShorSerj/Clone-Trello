@@ -17,36 +17,6 @@ import {
 
 const axios = require('axios').default;
 
-// axios.get('/tasks')
-//     .then(function (response) {
-//         // console.log('response/axios', response)
-//         // handle success
-//         if (response.data.status.code != 0) {
-//             ("Ошибка")
-//         }
-
-//         let content = response.data.content
-//         if (content.length > 0) {
-//             const listColumns = document.querySelector('.list-column')
-//             content.forEach((element) => {
-//                 const columnNew = Column.create(element.id, element.name)
-//                 const list = columnNew.querySelector(".list-tasks")
-//                 element.tasks.forEach((task) => {
-//                     const taskNew = Task.create(task.id, task.text)
-//                     list.append(taskNew)
-//                 })
-//                 listColumns.append(columnNew)
-//             })
-//         }
-
-//     })
-//     .catch(function (error) {
-//         // handle error
-//         console.log(error);
-//     })
-//     .then(function () {
-//         // always executed
-//     });
 
 let boardRequest = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/board', "", "GET"))
@@ -108,17 +78,5 @@ window.onbeforeunload = function () {
             }
             body.push(bodyTask)        
         })
-    })
-
-    axios.post('/updateBoard', body)
-    .then(function (response) {
-        console.log('all elements save', response)
-    })
-    .catch(function (error) {
-        // handle error
-        console.log(error);
-    })
-    .then(function () {
-        // always executed
     })
 }

@@ -93,7 +93,8 @@ app.use('/updateTask', (req, res) => {
     Tasks.updateOne({
         id: body.id
     }, {
-        value: body.text
+        value: body.text,
+        idParent: body.idParent
     }, function (err, result) {
         if (err) return console.log(err)
         console.log('updated', result)
@@ -121,29 +122,6 @@ app.use('/deleteTask', (req, res) => {
         if (err) return console.log(err)
         res.send("Data deleted")
     })
-});
-
-app.use('/updateBoard', (req, res) => {
-    let body = req.body
-    Tasks.deleteMany({}, function (err) {
-        if (err) return console.log(err)
-        body.forEach(function (item) {
-            const task = new Tasks({
-                idParent: item.idParent,
-                id: item.id || null,
-                value: item.value
-            });
-            task.save()
-                .then(function (doc) {
-                    console.log("Сохранен объект", doc)
-                })
-                .catch(function (err) {
-                    console.log(err)
-                    mongoose.disconnect()
-                })
-        })
-    })
-    res.send("Data fixed")
 });
 
 app.get('/test', function (req, res) {
