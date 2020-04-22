@@ -124,6 +124,29 @@ app.use('/deleteTask', (req, res) => {
     })
 });
 
+app.use('/updateBoard', (req, res) => {
+    let body = req.body
+    Tasks.deleteMany({}, function (err) {
+        if (err) return console.log(err)
+        body.forEach(function (item) {
+            const task = new Tasks({
+                idParent: item.idParent,
+                id: item.id || null,
+                value: item.value
+            });
+            task.save()
+                .then(function (doc) {
+                    console.log("Сохранен объект", doc)
+                })
+                .catch(function (err) {
+                    console.log(err)
+                    mongoose.disconnect()
+                })
+        })
+    })
+    res.send("Data fixed")
+});
+
 app.get('/test', function (req, res) {
     Tasks.find({}, function (err, docs) {
         if (err) return console.log(err);

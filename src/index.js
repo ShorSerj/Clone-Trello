@@ -79,4 +79,16 @@ window.onbeforeunload = function () {
             body.push(bodyTask)        
         })
     })
+
+    axios.post('/updateBoard', body)
+    .then(function (response) {
+        console.log('all elements save', response)
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    })
 }
