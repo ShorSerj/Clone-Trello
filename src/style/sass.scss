@@ -377,3 +377,32 @@ main {
         }
     }
 }
+
+
+.containerError{
+    position: absolute;
+    width: 500px;
+    background-color: white;
+    display: none;
+    position: absolute;
+    margin: auto;
+    border: solid 1px #dfdfdf;
+    border-radius: 3px;
+    z-index: 100;
+
+    .titleError{
+        color: #5e6c84;
+        position: relative;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid rgba(9, 30, 66, .13);
+        line-height: 39px;
+        font-size: 14px;
+        font-weight: 400;
+    }
+    
+    button{
+        display: block;
+        margin: 10px auto;
+    }
+}

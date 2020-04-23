@@ -122,7 +122,7 @@ const Column = {
         contextContainer.append(contextDel)
 
         contextDelButton.addEventListener('click', () => {
-            columnNewElement.remove()
+            columnTitle.focus()
             Column.deleteColumn(columnNewElement)
         })
         // \Button Delete
@@ -215,18 +215,35 @@ const Column = {
     },
 
     deleteColumn(element) {
-        const body = {}
-        body.idParent = element.closest('.column').getAttribute('data-column-id')
-        axios.post('/deleteColumn', body)
-            .then(function (response) {
-                console.log('element deleted', response)
+        if (element.querySelector('.task')) {
+            let centerX = document.documentElement.clientWidth / 2 - 502 / 2;
+            let centerY = document.documentElement.clientHeight / 2 - 200;
+            let windowAlert= document.querySelector('.containerError')
+            windowAlert.style.display = 'block'
+            windowAlert.style.top = centerY + 'px'
+            windowAlert.style.left = centerX + 'px'
+
+            let errButton= document.querySelector('#errButton')
+            errButton.addEventListener('click', function(){
+                windowAlert.style.display = 'none'
             })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
+            
+        } else {
+            element.remove()
+            console.log('element', element)
+            const body = {}
+            body.idParent = element.closest('.column').getAttribute('data-column-id')
+            axios.post('/deleteColumn', body)
+                .then(function (response) {
+                    console.log('element deleted', response)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
+        }
     },
 
     addDragnDropEventColums(columnElement) {
