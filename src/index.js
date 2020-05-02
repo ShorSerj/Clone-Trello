@@ -14,10 +14,36 @@ import {
 import {
     Send
 } from "./sendBack"
+// import {
+//     Authorization
+// } from "./Authorization.js"
+
 
 const axios = require('axios').default;
 
+//////////////////////////////////////////////////////////
+const logButton = document.querySelector('.titleLog')
+const signButton = document.querySelector('.titleSign')
 
+const logBody = document.querySelector('.bodyLogIn')
+const signbODY = document.querySelector('.bodySignUp')
+
+logButton.addEventListener('click', function () {
+    signButton.style.color = 'grey'
+    signbODY.style.display = 'none'
+
+    logButton.style.color = 'limegreen'
+    logBody.style.display = 'inherit'  
+})
+
+signButton.addEventListener('click', function () {
+    logButton.style.color = 'grey'
+    logBody.style.display = 'none'  
+
+    signButton.style.color = 'limegreen'
+    signbODY.style.display = 'inherit' 
+})
+////////////////////////////////////////////////////////////
 let boardRequest = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/board', "", "GET"))
 })
@@ -66,8 +92,8 @@ window.onbeforeunload = function () {
             idParent: columnId,
             value: columnTitle
         }
-        body.push(bodyColumn)  
-        
+        body.push(bodyColumn)
+
         tasks.forEach(function (item) {
             let taskText = item.querySelector('.task-text').innerHTML
             taskId++
@@ -76,19 +102,19 @@ window.onbeforeunload = function () {
                 id: taskId,
                 value: taskText
             }
-            body.push(bodyTask)        
+            body.push(bodyTask)
         })
     })
 
     axios.post('/updateBoard', body)
-    .then(function (response) {
-        console.log('all elements save', response)
-    })
-    .catch(function (error) {
-        // handle error
-        console.log(error);
-    })
-    .then(function () {
-        // always executed
-    })
+        .then(function (response) {
+            console.log('all elements save', response)
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        })
 }
