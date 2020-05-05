@@ -14,36 +14,23 @@ import {
 import {
     Send
 } from "./sendBack"
-// import {
-//     Authorization
-// } from "./Authorization.js"
+import {
+    Authorization
+} from "./Authorization.js"
 
 
 const axios = require('axios').default;
 
-//////////////////////////////////////////////////////////
-const logButton = document.querySelector('.titleLog')
-const signButton = document.querySelector('.titleSign')
+Authorization.Menu()
 
-const logBody = document.querySelector('.bodyLogIn')
-const signbODY = document.querySelector('.bodySignUp')
-
-logButton.addEventListener('click', function () {
-    signButton.style.color = 'grey'
-    signbODY.style.display = 'none'
-
-    logButton.style.color = 'limegreen'
-    logBody.style.display = 'inherit'  
+let logIn = new Promise(function (resolve, reject) {
+    resolve(Send.sendToBack('/log', "", "GET"))
 })
-
-signButton.addEventListener('click', function () {
-    logButton.style.color = 'grey'
-    logBody.style.display = 'none'  
-
-    signButton.style.color = 'limegreen'
-    signbODY.style.display = 'inherit' 
+logIn.then(function(result){
+    if(!result){
+        document.querySelector('.containerLogIn').style.display = 'block'
+    }
 })
-////////////////////////////////////////////////////////////
 let boardRequest = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/board', "", "GET"))
 })

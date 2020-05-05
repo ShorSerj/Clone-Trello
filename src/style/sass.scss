@@ -408,6 +408,7 @@ main {
 }
 
 .containerLogIn {
+    display: none;
     background-color: rgba(0, 0, 0, .32);
     position: absolute;
     top: 0;
@@ -430,7 +431,7 @@ main {
             cursor: pointer;
 
             .titleLog {
-                color: lawngreen;
+                color: rgb(29, 161, 242);
                 width: 49%;
                 display: inline-block;
                 text-align: center;
@@ -445,13 +446,14 @@ main {
         }
 
         .bodyLogIn {
-            // display: none;
 
             .username {
                 margin: 20px 46px 0 20px;
                 border: none;
                 background-color: rgba(20, 5, 50, 0.06);
                 padding: 5px 0px 2px 7px;
+                border-bottom: 2px solid rgb(101, 119, 134);
+                z-index: 0;
 
                 span {
                     padding-right: 10px;
@@ -469,6 +471,7 @@ main {
                 border: none;
                 background-color: rgba(20, 5, 50, 0.06);
                 padding: 5px 0px 2px 7px;
+                border-bottom: 2px solid rgb(101, 119, 134);
 
                 span {
                     display: block;
@@ -481,15 +484,25 @@ main {
                 }
             }
 
+            .messageError {
+                display: none;
+                color: red;
+                text-align: center;
+                margin-top: 10px;
+            }
+
             .submit {
                 text-align: center;
+                cursor: pointer;
 
                 .buttonLogIn {
-                    color: limegreen;
+                    color: white;
                     font-weight: 700;
                     margin: 15px 0px;
                     display: inline-block;
-                    padding: 10px;
+                    padding: 10px 80px 10px 80px;
+                    border-radius: 20px;
+                    background-color: rgba(29, 161, 242, 0.5);
                 }
             }
         }
@@ -537,13 +550,16 @@ main {
 
         .submit {
             text-align: center;
+            cursor: pointer;
 
-            .buttonLogIn {
-                color: limegreen;
+            .buttonSingUp {
+                color: white;
                 font-weight: 700;
                 margin: 15px 0px;
                 display: inline-block;
-                padding: 10px;
+                padding: 10px 80px 10px 80px;
+                border-radius: 20px;
+                background-color: rgba(29, 161, 242, 0.5);
             }
         }
     }

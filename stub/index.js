@@ -3,27 +3,21 @@ const fs = require('fs')
 const app = express()
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
+const session = require('express-session');
+const cookieParser = require('cookie-parser')
 const Schema = mongoose.Schema;
 
-//////////////////////////////////////
-// const user = new Schema({
-//     username: {
-//         type: String,
-//         required: true
-//     },
-//     password: {
-//         type: String,
-//         required: true,
-//         select: false
-//     }
-// })
 
-///////////////////////////////////////
-//Установка схемы
 const tasksScheme = new Schema({
     id: Number,
     idParent: Number,
     value: String
+});
+
+const createAccountScheme = new Schema({
+    username: String,
+    password: String,
+    email: String
 });
 
 //Подключение
@@ -34,15 +28,105 @@ mongoose.connect("mongodb://localhost:27017/usersdb", {
 
 
 const Tasks = mongoose.model("Tasks", tasksScheme);
+const createAccount = mongoose.model("createAccount", createAccountScheme);
+
 
 app.use(bodyParser.json());
+app.use(cookieParser());
+
+
+app.use(session({
+    // storage: store,
+    resave: false,
+    saveUninitialized: true,
+    secret: 'meggasupersecret'
+}))
 
 app.use(express.static('./dist'))
 app.set('port', process.env.PORT || 3000)
 
+
+
+app.use('/createAccount', (req, res) => {
+    let body = req.body
+
+    const newAccount = new createAccount({
+        username: body.username,
+        password: body.password,
+        email: body.email
+    });
+
+    newAccount.save()
+        .then(function (doc) {
+            console.log("Сохранен объект", doc)
+        })
+        .catch(function (err) {
+            console.log(err)
+            mongoose.disconnect()
+        })
+    res.send("Data fixed")
+});
+
+
+app.use('/logIn', function (req, res) {
+    let body = req.body
+    let username = body.username
+    console.log(username)
+    createAccount.find({
+        username
+    }, function (err, docs) {
+        if (err) return console.log(err);
+        if (docs[0]) {
+            if (docs[0].password == body.password) {
+                req.session.username = username
+                res.cookie('username', username, {
+                    maxAge: 900000,
+                    httpOnly: true
+                })
+                res.send('Login successful: ' + 'sessionId: ' + req.session.id + '; username: ' + req.session.username)
+            } else {
+                res.send('Login error')
+            }
+        } else {
+            console.log('Cookies: ', req.cookies)
+            res.send('Login error')
+        }
+    })
+})
+
+app.use('/logOut', function (req, res) {
+    let username = ""
+    res.cookie('username', username, {
+        maxAge: 900000,
+        httpOnly: true
+    })
+    res.send('Login successful: ' + 'sessionId: ' + req.session.id + '; username: ' + req.session.username)
+})
+
+/////////////////////////////////////////////////////////////////////////////////
+app.get('/testAccount', function (req, res) {
+    createAccount.find({}, function (err, docs) {
+        if (err) return console.log(err);
+        console.log(docs);
+        res.send(docs)
+    })
+})
+
+app.get('/log', function (req, res) {
+    if (req.cookies['username']) {
+        console.log('true', req.cookies['username']);
+        res.send('true')
+    } else {
+        console.log('false', req.cookies['username']);
+        res.send('false')
+    }
+})
+
 app.get('/board', function (req, res) {
+
     Tasks.find({}, function (err, docs) {
         if (err) return console.log(err);
+        console.log('Cookies: ', req.cookies['username'])
         console.log(docs);
         res.send(docs)
     })
