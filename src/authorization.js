@@ -107,7 +107,9 @@ const Authorization = {
         const newPassword = document.querySelector('#passSingUp')
         const confNewPassword = document.querySelector('#passConfirm')
         const newEmail = document.querySelector('#newEmail')
+        const submiteNewUser = document.querySelector('.buttonSingUp')
         let statusSignUp = false
+        let emailStatus = false
 
         newUsername.closest('.username').addEventListener('click', function () {
             newUsername.focus()
@@ -118,7 +120,7 @@ const Authorization = {
                 newUsername.closest('.username').style.color = 'black'
                 newUsername.closest('.username').style.borderBottom = '2px solid rgb(101, 119, 134)'
 
-                if (newUsername.value && newPassword.value && confNewPassword.value && newEmail.value) {
+                if (newUsername.value && newPassword.value && confNewPassword.value && emailStatus) {
                     submiteNewUser.style.backgroundColor = 'rgb(29,161,242)'
                     statusSignUp = true
                 } else {
@@ -136,7 +138,7 @@ const Authorization = {
             newPassword.addEventListener('blur', function () {
                 newPassword.closest('.password').style.color = 'black'
 
-                if (newUsername.value && newPassword.value && confNewPassword.value && newEmail.value) {
+                if (newUsername.value && newPassword.value && confNewPassword.value && emailStatus) {
                     if (newPassword.value === confNewPassword.value) {
                         newPassword.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
                         confNewPassword.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
@@ -162,6 +164,7 @@ const Authorization = {
             confNewPassword.addEventListener('blur', function () {
                 confNewPassword.closest('.password').style.color = 'black'
 
+
                 if (newUsername.value && newPassword.value && confNewPassword.value && newEmail.value) {
                     if (newPassword.value === confNewPassword.value) {
                         confNewPassword.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
@@ -180,15 +183,26 @@ const Authorization = {
         })
 
         newEmail.closest('.email').addEventListener('click', function () {
+
             newEmail.focus()
             newEmail.closest('.email').style.color = 'rgb(29,161,242)'
             newEmail.closest('.email').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
             newEmail.addEventListener('blur', function () {
-                newEmail.closest('.email').style.color = 'black'
-                newEmail.closest('.email').style.borderBottom = '2px solid rgb(101, 119, 134)'
+                var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+                var address = newEmail.value
 
-                if (newUsername.value && newPassword.value && confNewPassword.value && newEmail.value) {
+                if (reg.test(address) == false) {
+                    newEmail.closest('.email').style.borderBottom = '2px solid rgb(300, 0, 0)'
+                    emailStatus = false
+                } else {
+                    newEmail.closest('.email').style.color = 'black'
+                    newEmail.closest('.email').style.borderBottom = '2px solid rgb(101, 119, 134)'
+                    emailStatus = true
+                }
+
+                if (newUsername.value && newPassword.value && confNewPassword.value && emailStatus) {
+                    console.log(emailStatus)
                     submiteNewUser.style.backgroundColor = 'rgb(29,161,242)'
                     statusSignUp = true
                 } else {
@@ -196,10 +210,8 @@ const Authorization = {
                     statusSignUp = false
                 }
             })
+
         })
-
-
-        const submiteNewUser = document.querySelector('.buttonSingUp')
 
         submiteNewUser.addEventListener('click', function () {
             if (statusSignUp) {
@@ -219,10 +231,11 @@ const Authorization = {
                     .then(function () {
                         // always executed
                     });
+                // }
             }
         })
-    }
 
+    }
 }
 
 export {
