@@ -1,3 +1,7 @@
+import {
+    Send
+} from "./sendBack"
+
 const axios = require('axios').default;
 
 const Authorization = {
@@ -28,6 +32,7 @@ const Authorization = {
 
         Authorization.logIn()
         Authorization.SignUp()
+        Authorization.logOut()
 
     },
     logIn() {
@@ -89,6 +94,8 @@ const Authorization = {
                             document.querySelector('.messageError').style.display = 'block'
                         } else {
                             document.querySelector('.containerLogIn').style.display = 'none'
+                            username.value = ""
+                            password.value = ""
                         }
                     })
                     .catch(function (error) {
@@ -235,6 +242,27 @@ const Authorization = {
             }
         })
 
+    },
+
+    logOut() {
+        let user = document.querySelector('.user')
+        let logMenu = document.querySelector('.logMenu')
+        let logOutButton = document.querySelector('.logOut')
+
+        user.addEventListener('click', function () {
+            logMenu.style.display = 'block'
+            logMenu.focus()
+            
+            logMenu.addEventListener('blur', () => {
+                logMenu.style.display = 'none'
+            })
+        })
+
+        logOutButton.addEventListener('click', function () {
+            logMenu.style.display = 'none'
+            Send.sendToBack('/logOut', "", "GET")
+            document.querySelector('.containerLogIn').style.display = 'block'
+        })
     }
 }
 
