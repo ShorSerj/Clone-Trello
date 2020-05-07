@@ -409,7 +409,7 @@ main {
 
 .containerLogIn {
     display: none;
-    background-color: rgba(0, 0, 0, .32);
+    background-color: white;
     position: absolute;
     top: 0;
     left: 0;
@@ -419,8 +419,7 @@ main {
 
     .logIn {
         width: 400px;
-        margin: 60px auto;
-        background-color: white;
+        position: absolute;
 
         .title {
             display: block;
@@ -485,7 +484,7 @@ main {
                 }
             }
 
-            .messageError {
+            .logMessageError {
                 display: none;
                 color: red;
                 text-align: center;
@@ -512,18 +511,16 @@ main {
     .bodySignUp {
         display: none;
 
+        .required {
+            color: red;
+        }
+
         .username,
         .email {
             margin: 20px 46px 0 20px;
             border: none;
             background-color: rgba(20, 5, 50, 0.06);
             padding: 5px 0px 2px 7px;
-
-
-            span {
-                padding-right: 10px;
-                display: block;
-            }
 
             input {
                 border: none;
@@ -538,15 +535,18 @@ main {
             background-color: rgba(20, 5, 50, 0.06);
             padding: 5px 0px 2px 7px;
 
-            span {
-                display: block;
-            }
-
             input {
                 border: none;
                 background-color: rgba(20, 5, 50, 0.00);
                 width: 100%;
             }
+        }
+
+        .signMessageError {
+            display: none;
+            color: red;
+            text-align: center;
+            margin-top: 10px;
         }
 
         .submit {
