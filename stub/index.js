@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
 
 
 const tasksScheme = new Schema({
+    _id: String,
     id: Number,
     idParent: Number,
     value: String
@@ -49,6 +50,7 @@ app.set('port', process.env.PORT || 3000)
 
 app.use('/createAccount', (req, res) => {
     let body = req.body
+    let username = body.username
 
     const newAccount = new createAccount({
         username: body.username,
@@ -56,17 +58,25 @@ app.use('/createAccount', (req, res) => {
         email: body.email
     });
 
-    newAccount.save()
-        .then(function (doc) {
-            console.log("Сохранен объект", doc)
-        })
-        .catch(function (err) {
-            console.log(err)
-            mongoose.disconnect()
-        })
-    res.send("Data fixed")
-});
-
+    createAccount.find({
+        username
+    }, function (err, docs) {
+        if (err) return console.log(err);
+        if (docs[0] && docs[0].username === username) {
+            res.send('Error username')
+        } else {
+            newAccount.save()
+                .then(function (doc) {
+                    console.log("Сохранен объект1", doc)
+                })
+                .catch(function (err) {
+                    console.log(err)
+                    mongoose.disconnect()
+                })
+            res.send("Data fixed")
+        }
+    })
+})
 
 app.use('/logIn', function (req, res) {
     let body = req.body
@@ -78,17 +88,16 @@ app.use('/logIn', function (req, res) {
         if (err) return console.log(err);
         if (docs[0]) {
             if (docs[0].password == body.password) {
-                req.session.username = username
-                res.cookie('username', username, {
+                req.session._id = docs[0]._id
+                res.cookie('_id', docs[0]._id, {
                     maxAge: 900000,
                     httpOnly: true
                 })
-                res.send('Login successful: ' + 'sessionId: ' + req.session.id + '; username: ' + req.session.username)
+                res.send(docs[0]._id)
             } else {
                 res.send('Login error')
             }
         } else {
-            console.log('Cookies: ', req.cookies)
             res.send('Login error')
         }
     })
@@ -113,20 +122,27 @@ app.get('/testAccount', function (req, res) {
 })
 
 app.get('/log', function (req, res) {
-    if (req.cookies['username']) {
-        console.log('true', req.cookies['username']);
-        res.send('true')
+    let id = req.cookies['_id']
+    let userFind = `Object(${id})`
+    if (req.cookies['_id'] !== null) {
+        Tasks.find({
+            userFind
+        }, function (err, docs) {
+            if (err) return console.log(err);
+            res.send(docs)
+        })
+        // res.send('true')
     } else {
-        console.log('false', req.cookies['username']);
         res.send('false')
     }
 })
 
 app.get('/board', function (req, res) {
-
-    Tasks.find({}, function (err, docs) {
+    let id = req.cookies['_id']
+    Tasks.find({
+        id
+    }, function (err, docs) {
         if (err) return console.log(err);
-        console.log('Cookies: ', req.cookies['username'])
         console.log(docs);
         res.send(docs)
     })

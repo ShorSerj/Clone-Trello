@@ -82,13 +82,15 @@
         </div>
     </footer>
 
-    <form action="">
-        <div class="containerLogIn">
-            <div class="logIn">
-                <div class="title">
-                    <span class="titleLog">Log in</span>
-                    <span class="titleSign">Sign up</span>
-                </div>
+
+    <div class="containerLogIn">
+        <div class="logIn">
+            <div class="title">
+                <span class="titleLog">Log in</span>
+                <span class="titleSign">Sign up</span>
+            </div>
+
+            <form action="">
                 <div class="bodyLogIn">
                     <div class="username">
                         <label>Email, or username</label>
@@ -101,6 +103,9 @@
                     <div class="logMessageError">Error username or password</div>
                     <div class="submit"><span class="buttonLogIn">Log in</span></div>
                 </div>
+            </form>
+
+            <form action="">
                 <div class="bodySignUp">
                     <div class="username">
                         <label>Username</label><span class="required">*</span>
@@ -120,10 +125,15 @@
                     </div>
                     <span class="signMessageError"></span>
                     <div class="submit"><span class="buttonSingUp">Sign Up</span></div>
+                    <div class="successRegister">
+                        <span class="successMessage">Registration completed successfully. Now you need to log in to your account.</span>
+                        <span class='agreeLogIn'>Log in</span>
+                    </div>
                 </div>
-            </div>
+            </form>
+
         </div>
-    </form>
+    </div>
 
 </body>
 

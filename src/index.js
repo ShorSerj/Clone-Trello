@@ -26,28 +26,32 @@ Authorization.Menu()
 let logIn = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/log', "", "GET"))
 })
-logIn.then(function(result){
-    if(!result){
+logIn.then(function (result) {
+    if (!result) {
         document.querySelector('.containerLogIn').style.display = 'block'
-    }
-})
-let boardRequest = new Promise(function (resolve, reject) {
-    resolve(Send.sendToBack('/board', "", "GET"))
-})
 
-boardRequest.then(function (result) {
-    const containerColumn = document.querySelector('.list-column')
-    result.forEach((element) => {
-        if (!element.id) {
-            const boardColumn = Column.create(element.idParent, element.value)
-            containerColumn.append(boardColumn)
-        } else {
-            const parentColumn = containerColumn.querySelector(`[data-column-id='${element.idParent}']`)
-            const containerTask = parentColumn.querySelector(".list-tasks")
-            const boardTask = Task.create(element.id, element.value)
-            containerTask.append(boardTask)
-        }
-    })
+    } else {
+        let boardRequest = new Promise(function (resolve, reject) {
+
+            resolve(Send.sendToBack('/board', "", "GET"))         
+        })
+
+        boardRequest.then(function (result) {
+            console.log('result')
+            const containerColumn = document.querySelector('.list-column')
+            result.forEach((element) => {
+                if (!element.id) {
+                    const boardColumn = Column.create(element.idParent, element.value)
+                    containerColumn.append(boardColumn)
+                } else {
+                    const parentColumn = containerColumn.querySelector(`[data-column-id='${element.idParent}']`)
+                    const containerTask = parentColumn.querySelector(".list-tasks")
+                    const boardTask = Task.create(element.id, element.value)
+                    containerTask.append(boardTask)
+                }
+            })
+        })
+    }
 })
 
 window.onload = () => {

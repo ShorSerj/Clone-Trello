@@ -507,64 +507,93 @@ main {
             }
         }
     }
+}
 
-    .bodySignUp {
-        display: none;
+.bodySignUp {
+    display: none;
 
-        .required {
-            color: red;
-        }
+    .required {
+        color: red;
+    }
 
-        .username,
-        .email {
-            margin: 20px 46px 0 20px;
+    .username,
+    .email {
+        margin: 20px 46px 0 20px;
+        border: none;
+        background-color: rgba(20, 5, 50, 0.06);
+        padding: 5px 0px 2px 7px;
+
+        input {
             border: none;
-            background-color: rgba(20, 5, 50, 0.06);
-            padding: 5px 0px 2px 7px;
-
-            input {
-                border: none;
-                background-color: rgba(20, 5, 50, 0.00);
-                width: 100%;
-            }
-        }
-
-        .password {
-            margin: 20px 46px 0 20px;
-            border: none;
-            background-color: rgba(20, 5, 50, 0.06);
-            padding: 5px 0px 2px 7px;
-
-            input {
-                border: none;
-                background-color: rgba(20, 5, 50, 0.00);
-                width: 100%;
-            }
-        }
-
-        .signMessageError {
-            display: none;
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .submit {
-            text-align: center;
-            cursor: pointer;
-
-            .buttonSingUp {
-                color: white;
-                font-weight: 700;
-                margin: 15px 0px;
-                display: inline-block;
-                padding: 10px 80px 10px 80px;
-                border-radius: 20px;
-                background-color: rgba(29, 161, 242, 0.5);
-            }
+            background-color: rgba(20, 5, 50, 0.00);
+            width: 100%;
         }
     }
+
+    .password {
+        margin: 20px 46px 0 20px;
+        border: none;
+        background-color: rgba(20, 5, 50, 0.06);
+        padding: 5px 0px 2px 7px;
+
+        input {
+            border: none;
+            background-color: rgba(20, 5, 50, 0.00);
+            width: 100%;
+        }
+    }
+
+    .signMessageError {
+        display: none;
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .submit {
+        text-align: center;
+        cursor: pointer;
+
+        .buttonSingUp {
+            color: white;
+            font-weight: 700;
+            margin: 15px 0px;
+            display: inline-block;
+            padding: 10px 80px 10px 80px;
+            border-radius: 20px;
+            background-color: rgba(29, 161, 242, 0.5);
+        }
+    }
+
+    .successRegister {
+        display: none;
+        position: absolute;
+        top: 160px;
+        background-color: white;
+        border: solid 1px black;
+        width: 570px;
+        padding: 8px;
+        left: -90px;
+
+        .successMessage {
+            padding: 10px 8px;
+            display: inline-block;
+        }
+
+        .agreeLogIn {
+            cursor: pointer;
+            margin: 15px 10px 5px 455px;
+            display: inline-block;
+            border-radius: 20px;
+            background-color: rgba(29, 161, 242, 0.8);
+            padding: 10px 20px 10px 20px;
+            color: white;
+            font-weight: 700;
+        }
+
+    }
 }
+
 
 .logMenu {
     display: none;
