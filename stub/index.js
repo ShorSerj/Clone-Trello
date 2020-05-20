@@ -16,6 +16,7 @@ const tasksScheme = new Schema({
 });
 
 const createAccountScheme = new Schema({
+    // _id: String,
     username: String,
     password: String,
     email: String
@@ -48,60 +49,60 @@ app.set('port', process.env.PORT || 3000)
 
 
 
-app.use('/createAccount', (req, res) => {
-    let body = req.body
-    let username = body.username
+// app.use('/createAccount', (req, res) => {
+//     let body = req.body
+//     let username = body.username
 
-    const newAccount = new createAccount({
-        username: body.username,
-        password: body.password,
-        email: body.email
-    });
+//     const newAccount = new createAccount({
+//         username: body.username,
+//         password: body.password,
+//         email: body.email
+//     });
 
-    createAccount.find({
-        username
-    }, function (err, docs) {
-        if (err) return console.log(err);
-        if (docs[0] && docs[0].username === username) {
-            res.send('Error username')
-        } else {
-            newAccount.save()
-                .then(function (doc) {
-                    console.log("Сохранен объект1", doc)
-                })
-                .catch(function (err) {
-                    console.log(err)
-                    mongoose.disconnect()
-                })
-            res.send("Data fixed")
-        }
-    })
-})
+//     createAccount.find({
+//         username
+//     }, function (err, docs) {
+//         if (err) return console.log(err);
+//         if (docs[0] && docs[0].username === username) {
+//             res.send('Error username')
+//         } else {
+//             newAccount.save()
+//                 .then(function (doc) {
+//                     console.log("Сохранен объект1", doc)
+//                 })
+//                 .catch(function (err) {
+//                     console.log(err)
+//                     mongoose.disconnect()
+//                 })
+//             res.send("Data fixed")
+//         }
+//     })
+// })
 
-app.use('/logIn', function (req, res) {
-    let body = req.body
-    let username = body.username
-    console.log(username)
-    createAccount.find({
-        username
-    }, function (err, docs) {
-        if (err) return console.log(err);
-        if (docs[0]) {
-            if (docs[0].password == body.password) {
-                req.session._id = docs[0]._id
-                res.cookie('_id', docs[0]._id, {
-                    maxAge: 900000,
-                    httpOnly: true
-                })
-                res.send(docs[0]._id)
-            } else {
-                res.send('Login error')
-            }
-        } else {
-            res.send('Login error')
-        }
-    })
-})
+// app.use('/logIn', function (req, res) {
+//     let body = req.body
+//     let username = body.username
+//     // console.log(username)
+//     // createAccount.find({
+//     //     username
+//     // }, function (err, docs) {
+//     //     if (err) return console.log(err);
+//     //     if (docs[0]) {
+//     //         if (docs[0].password == body.password) {
+//     //             req.session._id = docs[0]._id
+//     //             res.cookie('_id', docs[0]._id, {
+//     //                 maxAge: 900000,
+//     //                 httpOnly: true
+//     //             })
+//     //             res.send(docs[0]._id)
+//     //         } else {
+//     //             res.send('Login error')
+//     //         }
+//     //     } else {
+//     //         res.send('Login error')
+//     //     }
+//     // })
+// })
 
 app.use('/logOut', function (req, res) {
     let username = ""
@@ -121,21 +122,21 @@ app.get('/testAccount', function (req, res) {
     })
 })
 
-app.get('/log', function (req, res) {
-    let id = req.cookies['_id']
-    let userFind = `Object(${id})`
-    if (req.cookies['_id'] !== null) {
-        Tasks.find({
-            userFind
-        }, function (err, docs) {
-            if (err) return console.log(err);
-            res.send(docs)
-        })
-        // res.send('true')
-    } else {
-        res.send('false')
-    }
-})
+// app.get('/log', function (req, res) {
+//     let id = req.cookies['_id']
+//     let userFind = `Object(${id})`
+//     if (req.cookies['_id'] !== null) {
+//         Tasks.find({
+//             userFind
+//         }, function (err, docs) {
+//             if (err) return console.log(err);
+//             res.send(docs)
+//         })
+//         // res.send('true')
+//     } else {
+//         res.send('false')
+//     }
+// })
 
 app.get('/board', function (req, res) {
     let id = req.cookies['_id']

@@ -26,6 +26,7 @@ Authorization.Menu()
 let logIn = new Promise(function (resolve, reject) {
     resolve(Send.sendToBack('/log', "", "GET"))
 })
+
 logIn.then(function (result) {
     if (!result) {
         document.querySelector('.containerLogIn').style.display = 'block'
