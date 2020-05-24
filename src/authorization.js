@@ -36,87 +36,95 @@ const Authorization = {
             signbODY.style.display = 'inherit'
         })
 
-        Authorization.logIn()
+
+
         Registration.SignUp()
         Authorization.logOut()
 
+        let getId = new Promise(function (resolve, reject) {
+            resolve(Authorization.logIn())
+        })
+
+        return getId.then()
     },
     logIn() {
-        let status = false
+        let promise = new Promise(function (resolve, reject) {
+            let status = false
+            const username = document.querySelector('#username')
+            const password = document.querySelector('#pass')
 
-        const username = document.querySelector('#username')
-        const password = document.querySelector('#pass')
+            username.closest('.username').addEventListener('click', function () {
+                username.focus()
+                document.querySelector('.logMessageError').style.display = 'none'
+                username.closest('.username').style.color = 'rgb(29,161,242)'
+                username.closest('.username').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
-        username.closest('.username').addEventListener('click', function () {
-            username.focus()
-            document.querySelector('.logMessageError').style.display = 'none'
-            username.closest('.username').style.color = 'rgb(29,161,242)'
-            username.closest('.username').style.borderBottom = 'solid 2px rgb(29,161,242)'
+                username.addEventListener('blur', function () {
+                    username.closest('.username').style.color = 'black'
+                    username.closest('.username').style.borderBottom = '2px solid rgb(101, 119, 134)'
 
-            username.addEventListener('blur', function () {
-                username.closest('.username').style.color = 'black'
-                username.closest('.username').style.borderBottom = '2px solid rgb(101, 119, 134)'
+                    if (username.value && password.value) {
+                        submite.style.backgroundColor = 'rgb(29,161,242)'
+                        status = true
+                    } else {
+                        submite.style.backgroundColor = 'rgba(29,161,242,0.5)'
+                        status = false
+                    }
+                })
+            })
+            password.closest('.password').addEventListener('click', function () {
+                password.focus()
+                document.querySelector('.logMessageError').style.display = 'none'
+                password.closest('.password').style.color = 'rgb(29,161,242)'
+                password.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
-                if (username.value && password.value) {
-                    submite.style.backgroundColor = 'rgb(29,161,242)'
-                    status = true
-                } else {
-                    submite.style.backgroundColor = 'rgba(29,161,242,0.5)'
-                    status = false
+                password.addEventListener('blur', function () {
+                    password.closest('.password').style.color = 'black'
+                    password.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
+
+                    if (username.value && password.value) {
+                        submite.style.backgroundColor = 'rgb(29,161,242)'
+                        status = true
+                    } else {
+                        submite.style.backgroundColor = 'rgba(29,161,242,0.5)'
+                        status = false
+                    }
+                })
+            })
+
+            const submite = document.querySelector('.buttonLogIn')
+
+            submite.addEventListener('click', function () {
+                if (status) {
+                    const userlogIn = {
+                        username: username.value,
+                        password: password.value
+                    }
+                    axios.post('/logIn', userlogIn)
+                        .then(function (response) {
+                            if (response.data.error) {
+                                document.querySelector('.logMessageError').style.display = 'block'
+                            } else {
+                                document.querySelector('.logMessageError').style.display = 'none'
+                                document.querySelector('.containerLogIn').style.display = 'none'
+                                username.value = ""
+                                password.value = ""
+                                let id = response.data.idUser
+                                resolve(id)
+                            }
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });
                 }
             })
+
         })
-        password.closest('.password').addEventListener('click', function () {
-            password.focus()
-            document.querySelector('.logMessageError').style.display = 'none'
-            password.closest('.password').style.color = 'rgb(29,161,242)'
-            password.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
-
-            password.addEventListener('blur', function () {
-                password.closest('.password').style.color = 'black'
-                password.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
-
-                if (username.value && password.value) {
-                    submite.style.backgroundColor = 'rgb(29,161,242)'
-                    status = true
-                } else {
-                    submite.style.backgroundColor = 'rgba(29,161,242,0.5)'
-                    status = false
-                }
-            })
-        })
-
-        const submite = document.querySelector('.buttonLogIn')
-
-        submite.addEventListener('click', function () {
-            if (status) {
-                const userlogIn = {
-                    username: username.value,
-                    password: password.value
-                }
-
-                axios.post('/logIn', userlogIn)
-                    .then(function (response) {
-                        console.log('User log in!', response)
-                        if (response.data === 'Login error') {
-                            document.querySelector('.logMessageError').style.display = 'block'
-                        } else {
-                            document.querySelector('.logMessageError').style.display = 'none'
-                            document.querySelector('.containerLogIn').style.display = 'none'
-                            username.value = ""
-                            password.value = ""
-                        }
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-            }
-        })
-
+        return promise.then()
     },
 
     logOut() {

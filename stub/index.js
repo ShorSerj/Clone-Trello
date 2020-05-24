@@ -9,14 +9,13 @@ const Schema = mongoose.Schema;
 
 
 const tasksScheme = new Schema({
-    _id: String,
+    idUser: String,
     id: Number,
     idParent: Number,
     value: String
 });
 
-const createAccountScheme = new Schema({
-    // _id: String,
+const usersScheme = new Schema({
     username: String,
     password: String,
     email: String
@@ -30,7 +29,7 @@ mongoose.connect("mongodb://localhost:27017/usersdb", {
 
 
 const Tasks = mongoose.model("Tasks", tasksScheme);
-const createAccount = mongoose.model("createAccount", createAccountScheme);
+const UsersScheme = mongoose.model("usersScheme", usersScheme);
 
 
 app.use(bodyParser.json());
@@ -49,94 +48,74 @@ app.set('port', process.env.PORT || 3000)
 
 
 
-// app.use('/createAccount', (req, res) => {
-//     let body = req.body
-//     let username = body.username
+app.use('/createAccount', (req, res) => {
+    let body = req.body
+    let username = body.username
 
-//     const newAccount = new createAccount({
-//         username: body.username,
-//         password: body.password,
-//         email: body.email
-//     });
+    const newAccount = new UsersScheme({
+        username: body.username,
+        password: body.password,
+        email: body.email
+    });
 
-//     createAccount.find({
-//         username
-//     }, function (err, docs) {
-//         if (err) return console.log(err);
-//         if (docs[0] && docs[0].username === username) {
-//             res.send('Error username')
-//         } else {
-//             newAccount.save()
-//                 .then(function (doc) {
-//                     console.log("Сохранен объект1", doc)
-//                 })
-//                 .catch(function (err) {
-//                     console.log(err)
-//                     mongoose.disconnect()
-//                 })
-//             res.send("Data fixed")
-//         }
-//     })
-// })
+    UsersScheme.find({
+        username
+    }, function (err, docs) {
+        if (err) return console.log(err);
+        if (docs[0] && docs[0].username === username) {
+            res.send('Error username')
+        } else {
+            newAccount.save()
+                .then(function (docs) {
+                    console.log("Сохранен объект1", docs)
+                    res.send("Data fixed")
+                })
+                .catch(function (err) {
+                    console.log(err)
+                })
+        }
+    })
+})
 
-// app.use('/logIn', function (req, res) {
-//     let body = req.body
-//     let username = body.username
-//     // console.log(username)
-//     // createAccount.find({
-//     //     username
-//     // }, function (err, docs) {
-//     //     if (err) return console.log(err);
-//     //     if (docs[0]) {
-//     //         if (docs[0].password == body.password) {
-//     //             req.session._id = docs[0]._id
-//     //             res.cookie('_id', docs[0]._id, {
-//     //                 maxAge: 900000,
-//     //                 httpOnly: true
-//     //             })
-//     //             res.send(docs[0]._id)
-//     //         } else {
-//     //             res.send('Login error')
-//     //         }
-//     //     } else {
-//     //         res.send('Login error')
-//     //     }
-//     // })
-// })
+app.use('/logIn', function (req, res) {
+    let body = req.body
+    let username = body.username
+    UsersScheme.find({
+        username
+    }, function (err, docs) {
+        let answer = {}
+        if (err) return console.log(err);
+        if (docs[0]) {
+            if (docs[0].password == body.password) {
+                answer.code = 0
+                answer.idUser = docs[0]._id
+                console.log(answer)
+                res.send(answer)
+            } else {
+                answer.code = 1
+                answer.error = 'Логин или пароль не правильный'
+                res.send(answer)
+            }
+        } else {
+            answer.code = 2
+            answer.error = 'Ошибка в работе сайта, ошибка на back'
+            res.send(answer)
+        }
+    })
+})
 
 app.use('/logOut', function (req, res) {
-    let username = ""
-    res.cookie('username', username, {
-        maxAge: 900000,
-        httpOnly: true
-    })
     res.send('Login successful: ' + 'sessionId: ' + req.session.id + '; username: ' + req.session.username)
 })
 
 /////////////////////////////////////////////////////////////////////////////////
 app.get('/testAccount', function (req, res) {
-    createAccount.find({}, function (err, docs) {
+    UsersScheme.find({}, function (err, docs) {
         if (err) return console.log(err);
         console.log(docs);
         res.send(docs)
     })
 })
-
-// app.get('/log', function (req, res) {
-//     let id = req.cookies['_id']
-//     let userFind = `Object(${id})`
-//     if (req.cookies['_id'] !== null) {
-//         Tasks.find({
-//             userFind
-//         }, function (err, docs) {
-//             if (err) return console.log(err);
-//             res.send(docs)
-//         })
-//         // res.send('true')
-//     } else {
-//         res.send('false')
-//     }
-// })
 
 app.get('/board', function (req, res) {
     let id = req.cookies['_id']
