@@ -155,7 +155,7 @@ const Column = {
                     text: element.querySelector('.title').innerHTML
                 }
 
-                axios.post('/createColumn', body)
+                axios.post('/column/create', body)
                     .then(function (response) {
                         console.log('element fixed', response)
                     })
@@ -192,7 +192,7 @@ const Column = {
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
         }
-        axios.post('/updateColumn', body)
+        axios.post('/column/update', body)
             .then(function (response) {
                 console.log('element fixed', response)
             })
@@ -237,7 +237,7 @@ const Column = {
                 idUser: idUser
             }
             body.idParent = element.closest('.column').getAttribute('data-column-id')
-            axios.post('/deleteColumn', body)
+            axios.post('/column/delete', body)
                 .then(function (response) {
                     console.log('element deleted', response)
                 })

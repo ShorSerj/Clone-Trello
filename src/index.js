@@ -36,7 +36,7 @@ getIdUser.then(function (result) {
         idUser: idUser
     }
     let getBoard = new Promise(function (resolve, reject) {
-        resolve(Send.sendToBack('/board', body, "POST"))
+        resolve(Send.sendToBack('board/get', body, "POST"))
     })
     getBoard.then(function (result) {
 
@@ -95,7 +95,7 @@ getIdUser.then(function (result) {
             })
         })
 
-        axios.post('/updateBoard', body)
+        axios.post('/board/update', body)
             .then(function (response) {
                 console.log('all elements save', response)
             })

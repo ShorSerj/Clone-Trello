@@ -131,7 +131,7 @@ const Task = {
                     text: taskNew.innerHTML
                 }
 
-                axios.post('/createTask', body)
+                axios.post('/task/create', body)
                     .then(function (response) {
                         console.log('element fixed', response)
                     })
@@ -171,7 +171,7 @@ const Task = {
         }
 
         if (body.text && body.idParent) {
-            axios.post('/updateTask', body)
+            axios.post('/task/update', body)
                 .then(function (response) {
                     console.log('element fixed', response)
                 })
@@ -192,7 +192,7 @@ const Task = {
         body.idParent = parentId.getAttribute('data-column-id')
         body.id = element.getAttribute('data-task-id')
 
-        axios.post('/deleteTask', body)
+        axios.post('/task/delete', body)
             .then(function (response) {
                 console.log('element deleted', response)
             })
@@ -234,7 +234,7 @@ const Task = {
             idParent: columnId,
             text: value
         }
-        axios.post('/updateTask', body)
+        axios.post('/task/update', body)
                 .then(function (response) {
                     console.log('element fixed', response)
                 })

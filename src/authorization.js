@@ -98,7 +98,7 @@ const Authorization = {
                         username: username.value,
                         password: password.value
                     }
-                    axios.post('/logIn', userlogIn)
+                    axios.post('/user/login', userlogIn)
                         .then(function (response) {
                             if (response.data.error) {
                                 document.querySelector('.logMessageError').style.display = 'block'
@@ -141,7 +141,7 @@ const Authorization = {
 
         logOutButton.addEventListener('click', function () {
             logMenu.style.display = 'none'
-            Send.sendToBack('/logOut', "", "GET")
+            Send.sendToBack('/user/logout', "", "GET")
             document.querySelector('.containerLogIn').style.display = 'block'
         })
     }

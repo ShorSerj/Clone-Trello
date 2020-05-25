@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(express.static('./dist'))
 app.set('port', process.env.PORT || 3000)
 
-app.use('/createAccount', (req, res) => {
+app.use('/user/register', (req, res) => {
     let body = req.body
     let username = body.username
 
@@ -67,7 +67,7 @@ app.use('/createAccount', (req, res) => {
     })
 })
 
-app.use('/logIn', function (req, res) {
+app.use('/user/login', function (req, res) {
     let body = req.body
     let username = body.username
     UsersScheme.find({
@@ -98,19 +98,11 @@ app.use('/logIn', function (req, res) {
     })
 })
 
-app.use('/logOut', function (req, res) {
+app.use('/user/logout', function (req, res) {
     res.send('Logout successful')
 })
 
-app.get('/testAccount', function (req, res) {
-    UsersScheme.find({}, function (err, docs) {
-        if (err) return console.log(err);
-        console.log(docs);
-        res.send(docs)
-    })
-})
-
-app.post('/board', function (req, res) {
+app.post('/board/get', function (req, res) {
     let idUser = req.body.idUser
     Tasks.find({
         idUser
@@ -121,7 +113,7 @@ app.post('/board', function (req, res) {
     })
 })
 
-app.use('/createColumn', (req, res) => {
+app.use('/column/create', (req, res) => {
     let body = req.body
 
     const task = new Tasks({
@@ -141,7 +133,7 @@ app.use('/createColumn', (req, res) => {
     res.send("Data fixed")
 });
 
-app.use('/createTask', (req, res) => {
+app.use('/task/create', (req, res) => {
     let body = req.body
 
     const task = new Tasks({
@@ -162,7 +154,7 @@ app.use('/createTask', (req, res) => {
     res.send("Data fixed")
 });
 
-app.use('/updateColumn', (req, res) => {
+app.use('/column/update', (req, res) => {
     let body = req.body
 
     Tasks.updateOne({
@@ -177,7 +169,7 @@ app.use('/updateColumn', (req, res) => {
     res.send("Data fixed")
 });
 
-app.use('/updateTask', (req, res) => {
+app.use('/task/update', (req, res) => {
     let body = req.body
 
     Tasks.updateOne({
@@ -193,7 +185,7 @@ app.use('/updateTask', (req, res) => {
     res.send("Data fixed")
 });
 
-app.use('/deleteColumn', (req, res) => {
+app.use('/column/delete', (req, res) => {
     console.log(req.body)
     Tasks.remove({
         idUser: req.body.idUser,
@@ -204,7 +196,7 @@ app.use('/deleteColumn', (req, res) => {
     })
 });
 
-app.use('/deleteTask', (req, res) => {
+app.use('/task/delete', (req, res) => {
     console.log(req.body)
     Tasks.remove({
         idUser: req.body.idUser,
@@ -216,18 +208,15 @@ app.use('/deleteTask', (req, res) => {
     })
 });
 
-app.use('/updateBoard', (req, res) => {
+app.use('/board/update', (req, res) => {
     let body = req.body
-    console.log('bodyyyy', body)
     let idUser = req.body[0].idUser
-    console.log('idUseridUser', idUser)
     Tasks.deleteMany({
         idUser
-    }, function (err, doc) {
+    }, function (err) {
         if (err) {
             return console.log(err)
         } else {
-            console.log('i find:', doc)
             body.forEach(function (item) {
                 console.log('item', item)
                 const task = new Tasks({
@@ -243,7 +232,6 @@ app.use('/updateBoard', (req, res) => {
                     .catch(function (err) {
                         console.log(err)
                     })
-
             })
         }
     })

@@ -136,7 +136,7 @@ const Registration = {
                     email: newEmail.value,
                     password: newPassword.value
                 }
-                axios.post('/createAccount', createAccount)
+                axios.post('/user/register', createAccount)
                     .then(function (response) {
 
 
