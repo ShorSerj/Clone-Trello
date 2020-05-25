@@ -36,15 +36,12 @@ const Authorization = {
             signbODY.style.display = 'inherit'
         })
 
-
-
         Registration.SignUp()
         Authorization.logOut()
 
         let getId = new Promise(function (resolve, reject) {
             resolve(Authorization.logIn())
         })
-
         return getId.then()
     },
     logIn() {
@@ -72,6 +69,7 @@ const Authorization = {
                     }
                 })
             })
+
             password.closest('.password').addEventListener('click', function () {
                 password.focus()
                 document.querySelector('.logMessageError').style.display = 'none'

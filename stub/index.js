@@ -35,18 +35,8 @@ const UsersScheme = mongoose.model("usersScheme", usersScheme);
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-
-app.use(session({
-    // storage: store,
-    resave: false,
-    saveUninitialized: true,
-    secret: 'meggasupersecret'
-}))
-
 app.use(express.static('./dist'))
 app.set('port', process.env.PORT || 3000)
-
-
 
 app.use('/createAccount', (req, res) => {
     let body = req.body
@@ -84,7 +74,11 @@ app.use('/logIn', function (req, res) {
         username
     }, function (err, docs) {
         let answer = {}
-        if (err) return console.log(err);
+        if (err) {
+            answer.code = 2
+            answer.error = 'Ошибка в работе сайта, ошибка на back'
+            res.send(answer)
+        }
         if (docs[0]) {
             if (docs[0].password == body.password) {
                 answer.code = 0
@@ -97,18 +91,17 @@ app.use('/logIn', function (req, res) {
                 res.send(answer)
             }
         } else {
-            answer.code = 2
-            answer.error = 'Ошибка в работе сайта, ошибка на back'
+            answer.code = 1
+            answer.error = 'Логин или пароль не правильный'
             res.send(answer)
         }
     })
 })
 
 app.use('/logOut', function (req, res) {
-    res.send('Login successful: ' + 'sessionId: ' + req.session.id + '; username: ' + req.session.username)
+    res.send('Logout successful')
 })
 
-/////////////////////////////////////////////////////////////////////////////////
 app.get('/testAccount', function (req, res) {
     UsersScheme.find({}, function (err, docs) {
         if (err) return console.log(err);
@@ -117,10 +110,10 @@ app.get('/testAccount', function (req, res) {
     })
 })
 
-app.get('/board', function (req, res) {
-    let id = req.cookies['_id']
+app.post('/board', function (req, res) {
+    let idUser = req.body.idUser
     Tasks.find({
-        id
+        idUser
     }, function (err, docs) {
         if (err) return console.log(err);
         console.log(docs);
@@ -132,6 +125,7 @@ app.use('/createColumn', (req, res) => {
     let body = req.body
 
     const task = new Tasks({
+        idUser: body.idUser,
         idParent: body.idParent,
         value: body.text
     });
@@ -151,6 +145,7 @@ app.use('/createTask', (req, res) => {
     let body = req.body
 
     const task = new Tasks({
+        idUser: body.idUser,
         id: body.id,
         idParent: body.idParent,
         value: body.text
@@ -171,6 +166,7 @@ app.use('/updateColumn', (req, res) => {
     let body = req.body
 
     Tasks.updateOne({
+        idUser: body.idUser,
         idParent: body.idParent
     }, {
         value: body.text
@@ -185,6 +181,7 @@ app.use('/updateTask', (req, res) => {
     let body = req.body
 
     Tasks.updateOne({
+        idUser: body.idUser,
         id: body.id
     }, {
         value: body.text,
@@ -196,11 +193,11 @@ app.use('/updateTask', (req, res) => {
     res.send("Data fixed")
 });
 
-
 app.use('/deleteColumn', (req, res) => {
     console.log(req.body)
     Tasks.remove({
-        idParent: req.body.idParent,
+        idUser: req.body.idUser,
+        idParent: req.body.idParent
     }, function (err, result) {
         if (err) return console.log(err)
         res.send("Data deleted")
@@ -210,9 +207,10 @@ app.use('/deleteColumn', (req, res) => {
 app.use('/deleteTask', (req, res) => {
     console.log(req.body)
     Tasks.remove({
+        idUser: req.body.idUser,
         id: req.body.id,
         idParent: req.body.idParent
-    }, function (err, result) {
+    }, function (err) {
         if (err) return console.log(err)
         res.send("Data deleted")
     })
@@ -220,25 +218,36 @@ app.use('/deleteTask', (req, res) => {
 
 app.use('/updateBoard', (req, res) => {
     let body = req.body
-    Tasks.deleteMany({}, function (err) {
-        if (err) return console.log(err)
-        body.forEach(function (item) {
-            const task = new Tasks({
-                idParent: item.idParent,
-                id: item.id || null,
-                value: item.value
-            });
-            task.save()
-                .then(function (doc) {
-                    console.log("Сохранен объект", doc)
-                })
-                .catch(function (err) {
-                    console.log(err)
-                    mongoose.disconnect()
-                })
-        })
+    console.log('bodyyyy', body)
+    let idUser = req.body[0].idUser
+    console.log('idUseridUser', idUser)
+    Tasks.deleteMany({
+        idUser
+    }, function (err, doc) {
+        if (err) {
+            return console.log(err)
+        } else {
+            console.log('i find:', doc)
+            body.forEach(function (item) {
+                console.log('item', item)
+                const task = new Tasks({
+                    idUser: item.idUser,
+                    idParent: item.idParent,
+                    id: item.id || null,
+                    value: item.value
+                });
+                task.save()
+                    .then(function (doc) {
+                        console.log("Сохранен объект", doc)
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+
+            })
+        }
     })
-    res.send("Data fixed")
+    res.send("Data updated")
 });
 
 app.get('/test', function (req, res) {

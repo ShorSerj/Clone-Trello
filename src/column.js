@@ -8,7 +8,7 @@ const Column = {
     idCounter: 4,
     darggbleColumn: null,
 
-    create(id = null, title = "") {
+    create(id = null, idUser, title = "") {
         let idCounter = id
         if (!id) {
             idCounter = Column.idCounter
@@ -31,7 +31,7 @@ const Column = {
         columnButtonMenu.classList.add("fas")
         columnButtonMenu.classList.add("fa-ellipsis-h")
 
-        Column.contextMenu(columnNewElement, columnTitle, columnButtonMenu)
+        Column.contextMenu(columnNewElement, columnTitle, columnButtonMenu, idUser)
 
         const taskContainer = document.createElement("div")
         taskContainer.classList.add("list-tasks")
@@ -47,7 +47,7 @@ const Column = {
         columnNewElement.append(taskContainer)
         columnNewElement.append(buttonAddTask)
 
-        Column.eventAddTask(columnNewElement)
+        Column.eventAddTask(columnNewElement, idUser)
         Column.addDragnDropEventColums(columnNewElement)
 
         if (!id) {
@@ -56,7 +56,7 @@ const Column = {
         return columnNewElement
     },
 
-    contextMenu(columnNewElement, columnTitle, columnButtonMenu) {
+    contextMenu(columnNewElement, columnTitle, columnButtonMenu, idUser) {
         const columnContextMenu = document.createElement('nav')
         columnContextMenu.classList.add('columnMenu')
         columnContextMenu.setAttribute('tabindex', 0)
@@ -97,7 +97,7 @@ const Column = {
                 }
                 columnTitle.removeAttribute('contenteditable')
                 if (columnTitle.innerHTML !== firstTitle) {
-                    Column.updateColumn(columnTitle)
+                    Column.updateColumn(columnTitle, idUser)
                     columnTitle.removeEventListener("blur", eventBlur)
                 }
             }
@@ -127,7 +127,7 @@ const Column = {
         })
         // \Button Delete
 
-        columnButtonMenu.addEventListener('click', (event) => {
+        columnButtonMenu.addEventListener('click', () => {
             columnContextMenu.style.display = 'inline'
             columnContextMenu.focus()
 
@@ -138,7 +138,7 @@ const Column = {
         columnNewElement.append(columnContextMenu)
     },
 
-    addColumn(element) {
+    addColumn(element, idUser) {
         let columnNew = element.querySelector('.title')
         columnNew.setAttribute('contenteditable', true)
         columnNew.focus()
@@ -150,6 +150,7 @@ const Column = {
                 columnNew.removeAttribute('contenteditable')
 
                 const body = {
+                    idUser: idUser,
                     idParent: element.getAttribute('data-column-id'),
                     text: element.querySelector('.title').innerHTML
                 }
@@ -185,8 +186,9 @@ const Column = {
         return columnNextId
     },
 
-    updateColumn(element) {
+    updateColumn(element, idUser) {
         const body = {
+            idUser: idUser,
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML
         }
@@ -203,18 +205,18 @@ const Column = {
             });
     },
 
-    eventAddTask(columnElement) {
+    eventAddTask(columnElement, idUser) {
         let buttonAddTask = columnElement.querySelector(".add-task")
         buttonAddTask.addEventListener('click', function () {
             let idTasks = document.querySelectorAll('.task')
-            let id = Task.findIdTask(idTasks)
-            let taskNew = Task.create(id)
+            let id = Task.findIdTask(idTasks, idUser)
+            let taskNew = Task.create(id, idUser)
             columnElement.querySelector('.list-tasks').append(taskNew)
-            Task.addTask(taskNew, columnElement)
+            Task.addTask(taskNew, columnElement, idUser)
         })
     },
 
-    deleteColumn(element) {
+    deleteColumn(element, idUser) {
         if (element.querySelector('.task')) {
             let centerX = document.documentElement.clientWidth / 2 - 502 / 2;
             let centerY = document.documentElement.clientHeight / 2 - 200;
@@ -231,7 +233,9 @@ const Column = {
         } else {
             element.remove()
             console.log('element', element)
-            const body = {}
+            const body = {
+                idUser: idUser
+            }
             body.idParent = element.closest('.column').getAttribute('data-column-id')
             axios.post('/deleteColumn', body)
                 .then(function (response) {

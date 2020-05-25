@@ -408,7 +408,7 @@ main {
 }
 
 .containerLogIn {
-    display: none;
+    // display: none;
     background-color: white;
     position: absolute;
     top: 0;
@@ -494,7 +494,6 @@ main {
             .submit {
                 text-align: center;
                 cursor: pointer;
-
                 .buttonLogIn {
                     color: white;
                     font-weight: 700;

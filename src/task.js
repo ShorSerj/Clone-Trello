@@ -4,7 +4,7 @@ const Task = {
     idCounter: 10,
     darggbleTask: null,
 
-    create(id = null, content = "") {
+    create(id = null, idUser, content = "") {
         let idCounter = id
         if (!id) {
             idCounter = Task.idCounter
@@ -21,7 +21,7 @@ const Task = {
         taskElement.oncontextmenu = function () {
             return false
         };
-        Task.contextMenu(taskElement, taskEdit)
+        Task.contextMenu(taskElement, taskEdit, idUser)
 
         const taskDeadLine = document.createElement("div")
         taskElement.append(taskEdit)
@@ -30,12 +30,12 @@ const Task = {
             Task.idCounter++
         }
 
-        Task.addDragnDropEvent(taskElement)
+        Task.addDragnDropEvent(taskElement, idUser)
 
         return taskElement
     },
 
-    contextMenu(taskElement, taskEdit) {
+    contextMenu(taskElement, taskEdit, idUser) {
         const taskContextMenu = document.createElement('nav')
         taskContextMenu.classList.add('taskMenu')
         taskContextMenu.setAttribute('tabindex', 0)
@@ -71,7 +71,7 @@ const Task = {
                 }
                 taskEdit.removeAttribute('contenteditable')
                 if (taskEdit.innerHTML !== firstText) {
-                    Task.saveTask(taskEdit)
+                    Task.saveTask(taskEdit, idUser)
                     taskEdit.removeEventListener("blur", eventBlur)
                 }
             }
@@ -99,7 +99,7 @@ const Task = {
         contextDelButton.addEventListener('click', (event) => {
             taskElement.remove()
             let parents = event.composedPath()
-            Task.deleteTask(taskElement, parents[6])
+            Task.deleteTask(taskElement, parents[6], idUser)
         })
         // \Button Delete
 
@@ -114,7 +114,7 @@ const Task = {
         taskElement.append(taskContextMenu)
     },
 
-    addTask(element, parentElement) {
+    addTask(element, parentElement, idUser) {
         let taskNew = element.querySelector('.edit')
         taskNew.setAttribute('contenteditable', true)
         taskNew.focus()
@@ -125,6 +125,7 @@ const Task = {
             } else {
                 taskNew.removeAttribute('contenteditable')
                 const body = {
+                    idUser: idUser,
                     id: element.getAttribute('data-task-id'),
                     idParent: parentElement.getAttribute('data-column-id'),
                     text: taskNew.innerHTML
@@ -161,8 +162,9 @@ const Task = {
         return id
     },
 
-    saveTask(element) {
+    saveTask(element, idUser) {
         const body = {
+            idUser: idUser,
             idParent: element.closest('.column').getAttribute('data-column-id'),
             text: element.innerHTML,
             id: element.parentElement.getAttribute('data-task-id')
@@ -183,8 +185,10 @@ const Task = {
         }
     },
 
-    deleteTask(element, parentId) {
-        const body = {}
+    deleteTask(element, parentId, idUser) {
+        const body = {
+            idUser: idUser,
+        }
         body.idParent = parentId.getAttribute('data-column-id')
         body.id = element.getAttribute('data-task-id')
 
@@ -200,7 +204,7 @@ const Task = {
             });
     },
 
-    addDragnDropEvent(chooseTask) {
+    addDragnDropEvent(chooseTask, idUser) {
         chooseTask.setAttribute('draggable', true)
         chooseTask.addEventListener("dragstart", Task.evenDragStartTask)
         chooseTask.addEventListener("dragend", Task.evenDragEndTask)
@@ -216,7 +220,7 @@ const Task = {
         Task.darggbleTask = this
     },
 
-    evenDragEndTask(event) {
+    evenDragEndTask(event, idUser) {
         event.stopPropagation()
         this.classList.remove("dragElement")
         Task.darggbleTask = null
@@ -225,6 +229,7 @@ const Task = {
         let value = this.querySelector('.task-text').innerHTML
         console.log('value', value)
         let body = {
+            idUser: idUser,
             id: taskId,
             idParent: columnId,
             text: value

@@ -28,7 +28,7 @@ const Send = {
                 // alert("Запрос не удался");
             };
         })
-        return promise.then()  
+        return promise.then()
     }
 }
 export {
