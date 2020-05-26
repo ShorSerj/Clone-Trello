@@ -6,14 +6,14 @@ const Registration = {
         const newPassword = document.querySelector('#passSingUp')
         const confNewPassword = document.querySelector('#passConfirm')
         const newEmail = document.querySelector('#newEmail')
-        const submiteNewUser = document.querySelector('.buttonSingUp')
+        const submiteNewUser = document.querySelector('#bodySignUp > button')
+        console.log('submiteNewUser', submiteNewUser)
         const messageError = document.querySelector('.signMessageError')
         let statusSignUp = false
 
         newUsername.closest('.username').addEventListener('click', function () {
             document.querySelector('.signMessageError').style.display = "none"
 
-            newUsername.focus()
             newUsername.closest('.username').style.color = 'rgb(29,161,242)'
             newUsername.closest('.username').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
@@ -42,7 +42,6 @@ const Registration = {
 
         newPassword.closest('.password').addEventListener('click', function () {
             messageError.style.display = "none"
-            newPassword.focus()
             newPassword.closest('.password').style.color = 'rgb(29,161,242)'
             newPassword.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
@@ -71,7 +70,6 @@ const Registration = {
 
         confNewPassword.closest('.password').addEventListener('click', function () {
             messageError.style.display = "none"
-            confNewPassword.focus()
             confNewPassword.closest('.password').style.color = 'rgb(29,161,242)'
             confNewPassword.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
@@ -100,7 +98,6 @@ const Registration = {
 
         newEmail.closest('.email').addEventListener('click', function () {
             messageError.style.display = "none"
-            newEmail.focus()
             newEmail.closest('.email').style.color = 'rgb(29,161,242)'
             newEmail.closest('.email').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
@@ -128,7 +125,8 @@ const Registration = {
 
         })
 
-        submiteNewUser.addEventListener('click', function () {
+        submiteNewUser.addEventListener('click', function (event) {
+            event.preventDefault()
             let completeSignUp = document.querySelector('.agreeLogIn')
             if (statusSignUp) {
                 const createAccount = {

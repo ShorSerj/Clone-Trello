@@ -90,46 +90,49 @@
                 <span class="titleSign">Sign up</span>
             </div>
 
-            <form>
-                <div class="bodyLogIn">
+            <form id="bodyLogIn">
                     <div class="username">
-                        <label>Email, or username</label>
-                        <input type="text" id="username">
+                        <label>Email, or username
+                            <input type="text" id="username">
+                        </label>
                     </div>
                     <div class="password">
-                        <label>Password</label>
-                        <input type="password" name="pass" id="pass">
+                        <label>Password
+                            <input type="password" name="pass" id="pass">
+                        </label>
                     </div>
                     <div class="logMessageError">Error username or password</div>
-                    <div class="submit"><span class="buttonLogIn">Log in</span></div>
-                </div>
-            </form>
+                    <button type="submit" form="bodyLogIn">Log in</button>
+                </form>
 
-            <form>
-                <div class="bodySignUp">
+            <form id="bodySignUp">
                     <div class="username">
-                        <label>Username</label><span class="required">*</span>
-                        <input type="text" id="newUsername">
+                        <label class="required">Username
+                            <input type="text" id="newUsername">
+                        </label>
                     </div>
                     <div class="email">
-                        <label>Email</label>
-                        <input type="email" id="newEmail">
+                        <label>Email
+                            <input type="email" id="newEmail">
+                        </label>
                     </div>
                     <div class="password">
-                        <label>Password</label><span class="required">*</span>
-                        <input type="password" name="pass" id="passSingUp">
+                        <label class="required">Password
+                            <input type="password" name="pass" id="passSingUp">
+                        </label>
                     </div>
                     <div class="password">
-                        <label>Confirm password</label><span class="required">*</span>
-                        <input type="password" name="pass" id="passConfirm">
+                        <label class="required">Confirm password
+                            <input type="password" name="pass" id="passConfirm">
+                        </label>
                     </div>
                     <span class="signMessageError"></span>
-                    <div class="submit"><span class="buttonSingUp">Sign Up</span></div>
+                    <button type="submit" form="bodySignUp">Sign Up</button>
                     <div class="successRegister">
-                        <span class="successMessage">Registration completed successfully. Now you need to log in to your account.</span>
+                        <span class="successMessage">Registration completed successfully. Now you need to log in to your
+                            account.</span>
                         <span class='agreeLogIn'>Log in</span>
                     </div>
-                </div>
             </form>
 
         </div>

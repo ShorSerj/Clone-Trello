@@ -439,7 +439,7 @@ main {
             }
         }
 
-        .bodyLogIn {
+        #bodyLogIn {
 
             .username {
                 margin: 20px 46px 0 20px;
@@ -485,28 +485,26 @@ main {
                 margin-top: 10px;
             }
 
-            .submit {
-                text-align: center;
+            button {
                 cursor: pointer;
-
-                .buttonLogIn {
-                    color: white;
-                    font-weight: 700;
-                    margin: 15px 0px;
-                    display: inline-block;
-                    padding: 10px 80px 10px 80px;
-                    border-radius: 20px;
-                    background-color: rgba(29, 161, 242, 0.5);
-                }
+                color: white;
+                font-weight: 700;
+                margin: 15px 83px;
+                padding: 10px 80px 10px 80px;
+                border-radius: 20px;
+                background-color: rgba(29, 161, 242, 0.5);
+                border: none;
             }
+
         }
     }
 }
 
-.bodySignUp {
+#bodySignUp {
     display: none;
 
-    .required {
+    .required::before {
+        content: "*";
         color: red;
     }
 
@@ -544,20 +542,18 @@ main {
         margin-top: 10px;
     }
 
-    .submit {
-        text-align: center;
-        cursor: pointer;
 
-        .buttonSingUp {
-            color: white;
-            font-weight: 700;
-            margin: 15px 0px;
-            display: inline-block;
-            padding: 10px 80px 10px 80px;
-            border-radius: 20px;
-            background-color: rgba(29, 161, 242, 0.5);
-        }
+    button {
+        cursor: pointer;
+        color: white;
+        font-weight: 700;
+        margin: 15px 78px;
+        padding: 10px 80px 10px 80px;
+        border-radius: 20px;
+        background-color: rgba(29, 161, 242, 0.5);
+        border: none;
     }
+
 
     .successRegister {
         display: none;

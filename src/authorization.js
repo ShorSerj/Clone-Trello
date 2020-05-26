@@ -13,8 +13,8 @@ const Authorization = {
         const logButton = document.querySelector('.titleLog')
         const signButton = document.querySelector('.titleSign')
 
-        const logBody = document.querySelector('.bodyLogIn')
-        const signbODY = document.querySelector('.bodySignUp')
+        const logBody = document.querySelector('#bodyLogIn')
+        const signBody = document.querySelector('#bodySignUp')
 
         logIn.style.top = document.documentElement.clientHeight / 2 - 250 + "px"
         logIn.style.left = document.documentElement.clientWidth / 2 - 200 + "px"
@@ -22,7 +22,7 @@ const Authorization = {
 
         logButton.addEventListener('click', function () {
             signButton.style.color = 'grey'
-            signbODY.style.display = 'none'
+            signBody.style.display = 'none'
 
             logButton.style.color = 'rgb(29,161,242)'
             logBody.style.display = 'inherit'
@@ -33,7 +33,7 @@ const Authorization = {
             logBody.style.display = 'none'
 
             signButton.style.color = 'rgb(29,161,242)'
-            signbODY.style.display = 'inherit'
+            signBody.style.display = 'inherit'
         })
 
         Registration.SignUp()
@@ -51,7 +51,6 @@ const Authorization = {
             const password = document.querySelector('#pass')
 
             username.closest('.username').addEventListener('click', function () {
-                username.focus()
                 document.querySelector('.logMessageError').style.display = 'none'
                 username.closest('.username').style.color = 'rgb(29,161,242)'
                 username.closest('.username').style.borderBottom = 'solid 2px rgb(29,161,242)'
@@ -71,7 +70,6 @@ const Authorization = {
             })
 
             password.closest('.password').addEventListener('click', function () {
-                password.focus()
                 document.querySelector('.logMessageError').style.display = 'none'
                 password.closest('.password').style.color = 'rgb(29,161,242)'
                 password.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
@@ -90,9 +88,10 @@ const Authorization = {
                 })
             })
 
-            const submite = document.querySelector('.buttonLogIn')
+            const submite = document.querySelector('#bodyLogIn > button')
 
-            submite.addEventListener('click', function () {
+            submite.addEventListener('click', function (event) {
+                event.preventDefault()
                 if (status) {
                     const userlogIn = {
                         username: username.value,
@@ -107,7 +106,7 @@ const Authorization = {
                                 document.querySelector('.containerLogIn').style.display = 'none'
                                 username.value = ""
                                 password.value = ""
-                                let id = response.data.idUser
+                                let id = response.data
                                 resolve(id)
                             }
                         })

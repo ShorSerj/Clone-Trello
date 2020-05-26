@@ -31,7 +31,8 @@ let getIdUser = new Promise(function (resolve, reject) {
 })
 
 getIdUser.then(function (result) {
-    let idUser = result
+    console.log(result)
+    let idUser = result.idUser
     const body = {
         idUser: idUser
     }
@@ -39,8 +40,6 @@ getIdUser.then(function (result) {
         resolve(Send.sendToBack('board/get', body, "POST"))
     })
     getBoard.then(function (result) {
-
-        console.log('result')
         const containerColumn = document.querySelector('.list-column')
         result.forEach((element) => {
             if (!element.id) {
