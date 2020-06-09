@@ -1,12 +1,12 @@
 {
     "parser": "babel-eslint",
     "rules": {
-        "no-unused-vars":"warn"
+        "no-unused-vars": "warn",
     },
     "extends": ["eslint:recommended"],
-    "env": { 
+    "env": {
         "es6": true,
         "browser": true
-        
-     } 
+
+    }
 }

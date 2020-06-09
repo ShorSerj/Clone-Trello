@@ -421,7 +421,6 @@ main {
             font-size: 18px;
             font-weight: 800;
             border-bottom: 1px solid rgba(9, 30, 66, 0.13);
-            padding: 10px;
             cursor: pointer;
 
             .titleLog {
@@ -430,12 +429,14 @@ main {
                 display: inline-block;
                 text-align: center;
                 border-right: 1px solid rgba(9, 30, 66, 0.13);
+                padding: 15px 0 15px 0;
             }
 
             .titleSign {
                 width: 49%;
                 display: inline-block;
                 text-align: center;
+                padding: 15px 0 15px 0;
             }
         }
 

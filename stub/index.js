@@ -70,9 +70,11 @@ app.use('/user/register', (req, res) => {
 app.use('/user/login', function (req, res) {
     let body = req.body
     let username = body.username
+    let email = body.username
     UsersScheme.find({
         username
     }, function (err, docs) {
+        console.log(docs[0])
         let answer = {}
         if (err) {
             answer.code = 2
@@ -86,14 +88,28 @@ app.use('/user/login', function (req, res) {
                 console.log(answer)
                 res.send(answer)
             } else {
+
                 answer.code = 1
                 answer.error = 'Логин или пароль не правильный'
                 res.send(answer)
             }
         } else {
-            answer.code = 1
-            answer.error = 'Логин или пароль не правильный'
-            res.send(answer)
+            UsersScheme.find({
+                email
+            }, function (err, docs) {
+                if (docs[0]) {
+                    if (docs[0].password == body.password) {
+                        answer.code = 0
+                        answer.idUser = docs[0]._id
+                        console.log(answer)
+                        res.send(answer)
+                    } else {
+                        answer.code = 1
+                        answer.error = 'Логин или пароль не правильный'
+                        res.send(answer)
+                    }
+                }
+            })
         }
     })
 })

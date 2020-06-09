@@ -55,7 +55,7 @@ const Authorization = {
                 username.closest('.username').style.color = 'rgb(29,161,242)'
                 username.closest('.username').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
-                username.addEventListener('blur', function () {
+                username.addEventListener('keyup', function () {
                     username.closest('.username').style.color = 'black'
                     username.closest('.username').style.borderBottom = '2px solid rgb(101, 119, 134)'
 
@@ -74,7 +74,7 @@ const Authorization = {
                 password.closest('.password').style.color = 'rgb(29,161,242)'
                 password.closest('.password').style.borderBottom = 'solid 2px rgb(29,161,242)'
 
-                password.addEventListener('blur', function () {
+                password.addEventListener('keyup', function () {
                     password.closest('.password').style.color = 'black'
                     password.closest('.password').style.borderBottom = '2px solid rgb(101, 119, 134)'
 
@@ -107,6 +107,7 @@ const Authorization = {
                                 username.value = ""
                                 password.value = ""
                                 let id = response.data
+                                console.log(id)
                                 resolve(id)
                             }
                         })
